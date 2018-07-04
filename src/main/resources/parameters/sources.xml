@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sources>
+    <source consult="y" id="3">
+        <name>mayoclinic</name>
+        <link>https://www.mayoclinic.org/</link>
+        <tablecontents consult="y" type="div" class="tableofcontents">
+            <item consult="y" id="" role="menuitem" type="li" name="Symptoms &amp; causes" >
+                <sections consult="y" type="div" class="content">
+                    <section consult="y" id="1" role="" type="h2" name="Symptoms" />
+                    <section consult="y" id="2" role="" type="h2" name="Causes" />
+                </sections>
+            </item>
+            <item consult="y" id="" role="menuitem" type="li" name="Diagnosis &amp; treatment" >
+                <sections consult="y" type="div" class="content">
+                    <section consult="y" id="3" type="h2" name="Diagnosis" />
+                </sections>
+            </item>
+        </tablecontents>
+        <highlights consult="y">
+            <tag consult="y" id="main-content" class="" role="main" type="div" desc="principal" />
+            <tag consult="y" id="" class="alpha" type="ol" desc="disease_list" />
+            <tag consult="y" id="index" class="index" type="div" desc="disease_sub_list" />
+            <tag consult="y" id="" class="" role="menubar" type="ul" desc="horizontal_menu_bar" />
+        </highlights>
+        <links consult="y">
+            <link consult="y" id="1">https://www.mayoclinic.org/diseases-conditions</link>
+            <!--<link consult="y" id="1">en.wikipedia.org/wiki/Familial_hypocalciuric_hypercalcemia</link>-->
+        </links>
+    </source>
+</sources>
