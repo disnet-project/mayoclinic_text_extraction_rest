@@ -177,12 +177,10 @@ public class Constants {
     /**
      * XML_HIGHLIGHTS HL Constantes para consultar
      */
-    public static final String XML_HL_DISEASENAME = "diseasename";
-    public static final String XML_HL_INFOBOX = "infobox";
-    public static final String XML_HL_EXTERNAL_TEXT = "externalresoruce";
-    public static final String XML_HL_PLAIN_LIST = "plainlist";
-    public static final String XML_HL_HORIZONTAL_LIST = "horizontallist";
-    public static final String XML_HL_TEXT_ALIGN_CENTER = "textaligncenter";
+    public static final String XML_HL_MAIN = "principal";
+    public static final String XML_HL_DISEASE_LIST = "disease_list";
+    public static final String XML_HL_DISEASE_SUB_LIST = "disease_sub_list";
+    public static final String XML_HL_HORIZONTAL_MENU_BAR = "horizontal_menu_bar";
 
 
     /**

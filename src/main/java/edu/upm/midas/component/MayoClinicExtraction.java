@@ -4,19 +4,19 @@ import com.google.gson.GsonBuilder;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
+import edu.upm.midas.enums.StatusHttpEnum;
 import edu.upm.midas.model.document_structure.*;
 import edu.upm.midas.model.document_structure.text.List_;
 import edu.upm.midas.model.document_structure.text.Paragraph;
 import edu.upm.midas.model.document_structure.text.Table;
 import edu.upm.midas.model.document_structure.text.Text;
-import edu.upm.midas.model.xml.MenuItem;
-import edu.upm.midas.model.xml.XmlLink;
-import edu.upm.midas.model.xml.XmlSection;
-import edu.upm.midas.model.xml.XmlSource;
+import edu.upm.midas.model.xml.*;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.lang.model.util.Elements;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
@@ -181,16 +181,65 @@ public class MayoClinicExtraction {
      * @param linkList
      * @return
      */
-    public List<XmlLink> getAllLinksFromPrincipalLink(List<XmlLink> linkList) throws Exception {
+    public List<XmlLink> getAllLinksFromPrincipalLink(List<XmlLink> linkList, XmlSource xmlSource) throws Exception {
         List<XmlLink> diseaseLinkList = new ArrayList<>();
 
         Connection_ connection_;
+        Document document;
 
+        //<editor-fold desc="SE OBTIENE EL ENLACE PRINCIPAL">
+        int countDoc = 1;
         for (XmlLink xmlLink : linkList) {
             // Se conecta con el documento que tiene la lista de enfermedades
             // en orden alfabetico
             connection_ = connectDocument.connect(xmlLink.getUrl());
+            // Se verifica si hubo conexión con el documento (enlace Web)
+            // Se pinta en pantalla el status OK (esta disponible el enlace)
+            System.out.println(countDoc + " mayoclinicExtract " + xmlLink.getUrl() + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
+            //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
+            if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
+                // Se obtiene el documento HTML
+                document = connection_.getDocument();
+                // Se obtiene el elemento HTML que almacena el nombre de la enfermedad
+                String mainContentElementId = getHighlightXmlByDescription(Constants.XML_HL_MAIN, xmlSource).getId();
+                Elements listsOfDiseases = document.
+
+            } else {//end if oConnect.connection_().equals("OK")
+                // Mensaje mostrado al documento que no se pudo conectar
+                System.out.println(xmlLink.getUrl() + " ==> " + connection_.getStatus());
+            }//end else if oConnect.connection_().equals("OK")
+            //</editor-fold>
+            countDoc++;
         }
+        //</editor-fold>
+
+        // Retorna la lista de fuentes, con sus documentos, enfermedades, secciones, códigos y textos...
+        return diseaseLinkList;
+    }
+
+
+    /**
+     * Método que consulta los elementos relevantes (Highlight) en el XML según su descripción
+     *
+     * Con el fin de hacer consultas JSOUP más complejas valiendose de elementos importantes del documento
+     * como lo puede ser la clase de los infobox o clases de lista que contienen códigos interesantes
+     *
+     * Ej, de descripción: diseasename, infobox, externalresource... ver etiqueta highlight de sources.xml
+     *
+     * @param description
+     * @param xmlSource
+     * @return objeto XmlHighlight
+     */
+    public XmlHighlight getHighlightXmlByDescription(String description, XmlSource xmlSource){
+        XmlHighlight xmlHighlight = null;
+        for (XmlHighlight oHighlight:
+                xmlSource.getHighlightList()) {
+            if( oHighlight.getDescription().equals(description) ){
+                xmlHighlight = oHighlight;
+                return xmlHighlight;
+            }
+        }
+        return xmlHighlight;
     }
 
 }

@@ -16,7 +16,7 @@ public class Connection_ {
     private String link;
     private String status;
     private String statusCode;
-    private Document oDoc;
+    private Document document;
 
     public String getLink() {
         return link;
@@ -42,11 +42,11 @@ public class Connection_ {
         this.statusCode = statusCode;
     }
 
-    public Document getoDoc() {
-        return oDoc;
+    public Document getDocument() {
+        return document;
     }
 
-    public void setoDoc(Document oDoc) {
-        this.oDoc = oDoc;
+    public void setDocument(Document document) {
+        this.document = document;
     }
 }

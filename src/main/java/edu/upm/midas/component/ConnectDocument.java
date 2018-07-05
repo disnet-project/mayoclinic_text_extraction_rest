@@ -54,16 +54,16 @@ public class ConnectDocument {
             Connection connection = Jsoup.connect( connection_.getLink() ).userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0").referrer("http://www.google.com").timeout(JSOUP_TIMEOUT*1000);
             // Connection connection = Jsoup.connect( connection_.getLink().replace("http", "https") )
             //oResponse = connection.execute(); || Jsoup.connect(Constants.HTTP_HEADER + connection_.getLink()
-            connection_.setoDoc( connection.get()/*getHtmlDocument(connection)*/ );
+            connection_.setDocument( connection.get()/*getHtmlDocument(connection)*/ );
             connection_.setStatus( connection.execute().statusMessage() );
             connection_.setStatusCode( connection.execute().statusCode()+"" );
         } catch (Exception e) {
             System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
             connection_ = tryConnect(connection_);
-            if (connection_.getoDoc() == null) {
+            if (connection_.getDocument() == null) {
                 connection_.setStatus(StatusHttpEnum.NOT_FOUND.getDescripcion());
                 connection_.setStatusCode(StatusHttpEnum.NOT_FOUND.getClave());
-                connection_.setoDoc(null);
+                connection_.setDocument(null);
             }
         }
 
@@ -80,14 +80,14 @@ public class ConnectDocument {
             Connection connection = Jsoup.connect( convertLink ).userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0").referrer("http://www.google.com").timeout(JSOUP_TIMEOUT*1000);
             // Connection connection = Jsoup.connect( connection_.getLink().replace("http", "https") )
             //oResponse = connection.execute(); || Jsoup.connect(Constants.HTTP_HEADER + connection_.getLink()
-            connection_.setoDoc( connection.get()/*getHtmlDocument(connection)*/ );
+            connection_.setDocument( connection.get()/*getHtmlDocument(connection)*/ );
             connection_.setStatus( connection.execute().statusMessage() );
             connection_.setStatusCode( connection.execute().statusCode()+"" );
         } catch (Exception e) {
             System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
             connection_.setStatus( StatusHttpEnum.NOT_FOUND.getDescripcion() );
             connection_.setStatusCode( StatusHttpEnum.NOT_FOUND.getClave() );
-            connection_.setoDoc(null);
+            connection_.setDocument(null);
         }
         return connection_;
     }

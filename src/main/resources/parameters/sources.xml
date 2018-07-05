@@ -23,7 +23,7 @@
             <tag consult="y" id="" class="" role="menubar" type="ul" desc="horizontal_menu_bar" />
         </highlights>
         <links consult="y">
-            <link consult="y" id="1">https://www.mayoclinic.org/diseases-conditions</link>
+            <link consult="y" id="1" alternative="https://www.mayoclinic.org" >https://www.mayoclinic.org/diseases-conditions</link>
             <!--<link consult="y" id="1">en.wikipedia.org/wiki/Familial_hypocalciuric_hypercalcemia</link>-->
         </links>
     </source>
