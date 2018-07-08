@@ -125,6 +125,8 @@ public class Constants {
     public static final String HTML_TABLE_TH = "th";
     public static final String HTML_TABLE_TD = "td";
 
+    public static final String MAYOCLINIC_DISEASE_NAME_ELEMENT_DELETE = "(See: )";
+
     public static final List<String> HTML_LIST_TAG_PARENTS_LIST_TAG = new ArrayList<String>(){{
         add("ul");
         add("ol");
@@ -139,6 +141,7 @@ public class Constants {
 
     /** CONSULTAS BIBLIOTECA JSOUP */
     public static final String QUERY_A_HREF = "a[href]";
+    public static final String QUERY_CLASS = "class=";
     public static final String QUERY_A_CLASS = "a[class=";
     public static final String QUERY_ABS_HREF = "abs:href";
     public static final String QUERY_TABLE_CLASS = "table[class=";
@@ -167,6 +170,7 @@ public class Constants {
     public static final String XML_ATT_CONSULT_YES = "y";
     public static final String XML_ATT_CONSULT_NO = "n";
     public static final String XML_ATT_ID = "id";
+    public static final String XML_ATT_CODE = "code";
     public static final String XML_ATT_ROLE = "role";
     public static final String XML_ATT_TYPE = "type";
     public static final String XML_ATT_CLASS = "class";
@@ -180,6 +184,7 @@ public class Constants {
     public static final String XML_HL_MAIN = "principal";
     public static final String XML_HL_DISEASE_LIST = "disease_list";
     public static final String XML_HL_DISEASE_SUB_LIST = "disease_sub_list";
+    public static final String XML_HL_TABLE_OF_CONTENTS = "table_of_contents";
     public static final String XML_HL_HORIZONTAL_MENU_BAR = "horizontal_menu_bar";
 
 

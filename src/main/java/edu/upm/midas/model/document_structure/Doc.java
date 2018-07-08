@@ -30,6 +30,16 @@ public class Doc {
     private List<Code> codeList;
 
 
+    public Doc() {
+    }
+
+    public Doc(int id, String date, Link url, boolean hasConnected, boolean diseaseArticle) {
+        this.id = id;
+        this.date = date;
+        this.url = url;
+        this.hasConnected = hasConnected;
+        this.diseaseArticle = diseaseArticle;
+    }
 
     public int getId() {
         return id;
@@ -111,4 +121,20 @@ public class Doc {
         this.codeList = codeList;
     }
 
+
+    @Override
+    public String toString() {
+        return "Doc{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", url=" + url +
+                ", hasConnected=" + hasConnected +
+                ", diseaseArticle=" + diseaseArticle +
+                ", disease=" + disease +
+//                ", sectionCount=" + sectionCount +
+//                ", sectionList=" + sectionList +
+//                ", codeCount=" + codeCount +
+//                ", codeList=" + codeList +
+                '}';
+    }
 }

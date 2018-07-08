@@ -42,7 +42,7 @@ public class ReadXml {
     public List<XmlSource> read() throws Exception{
 
         ArrayList<XmlSource> xmlList = new ArrayList<>();
-        ArrayList<MenuItem> menuItemList = new ArrayList<>();
+        ArrayList<XmlMenuItem> xmlMenuItemList = new ArrayList<>();
         ArrayList<XmlSection> sectionList = new ArrayList<>();
         ArrayList<XmlHighlight> highlightList = new ArrayList<>();
         ArrayList<XmlLink> linkList = new ArrayList<>();
@@ -64,9 +64,10 @@ public class ReadXml {
             //Se obtiene el elemento 'source'
             Element source = (Element) sourceList.get(i);
 
-            //Se obtiene el atributo 'consult' e 'id' que esta en el tag 'source'
+            //Se obtiene el atributo 'consult', 'id' y 'code' que esta en el tag 'source'
             oXml.setConsultSource( source.getAttributeValue( Constants.XML_ATT_CONSULT ).trim() );
             oXml.setId( Integer.parseInt( source.getAttributeValue( Constants.XML_ATT_ID ) ) );
+            oXml.setCode( source.getAttributeValue( Constants.XML_ATT_CODE.trim() ) );
 
             //Si se permite 'y' se consulta un recurso
             if( oXml.getConsultSource().equals( Constants.XML_ATT_CONSULT_YES ) ) {
@@ -78,9 +79,9 @@ public class ReadXml {
                 Element tableOfContents = source.getChild( Constants.XML_TAG_TABLEOFCONTENTS );
                 //Se permite 'y' consultar la table of contents
                 if (tableOfContents.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals(Constants.Y_YES)){
-                    processXmlTableOfContents(tableOfContents, menuItemList, sectionList);
+                    processXmlTableOfContents(tableOfContents, xmlMenuItemList, sectionList);
                 }
-                oXml.setMenuItemList(menuItemList);
+                oXml.setXmlMenuItemList(xmlMenuItemList);
                 oXml.setSectionList(sectionList);
                 //<<<<<<<<<<<<<<<<<<<<< TABLE OF CONTENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -172,35 +173,35 @@ public class ReadXml {
     }
 
 
-    public void processXmlTableOfContents(Element tableOfContents, List<MenuItem> menuItemList, List<XmlSection> sectionList){
+    public void processXmlTableOfContents(Element tableOfContents, List<XmlMenuItem> xmlMenuItemList, List<XmlSection> sectionList){
         //<<<<Se obtiene el hijo 'tableofcontents' y después la lista de sus hijos>>>>
         List itemList = tableOfContents.getChildren();
         //Validación de lista de enlaces vacía
         if (itemList.size() > 0) {
             //Se recorren los hijos de 'tableofcontents'
             for (int l = 0; l < itemList.size(); l++) {
-                MenuItem menuItem = new MenuItem();
+                XmlMenuItem xmlMenuItem = new XmlMenuItem();
                 //Se obtiene el prelemento 'section'
                 Element item = (Element) itemList.get(l);
                 if( item.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals( Constants.XML_ATT_CONSULT_YES ) ) {
                     //Se obtiene el valor de los atributos de cada tag 'section'
-                    menuItem.setConsult( item.getAttributeValue( Constants.XML_ATT_CONSULT ).trim() );
-                    menuItem.setId( item.getAttributeValue( Constants.XML_ATT_ID ).trim() );
-                    menuItem.setRole( item.getAttributeValue( Constants.XML_ATT_ROLE ).trim() );
-                    menuItem.setType( item.getAttributeValue( Constants.XML_ATT_TYPE ).trim() );
-                    menuItem.setName( item.getAttributeValue( Constants.XML_ATT_NAME ).trim() );
+                    xmlMenuItem.setConsult( item.getAttributeValue( Constants.XML_ATT_CONSULT ).trim() );
+                    xmlMenuItem.setId( item.getAttributeValue( Constants.XML_ATT_ID ).trim() );
+                    xmlMenuItem.setRole( item.getAttributeValue( Constants.XML_ATT_ROLE ).trim() );
+                    xmlMenuItem.setType( item.getAttributeValue( Constants.XML_ATT_TYPE ).trim() );
+                    xmlMenuItem.setName( item.getAttributeValue( Constants.XML_ATT_NAME ).trim() );
                     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SECTIONS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                     Element sections = item.getChild( Constants.XML_TAG_SECTIONS );
                     //Se permite 'y' consultar todas las secciones
                     if( sections.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals(Constants.Y_YES) ){
                         List<XmlSection> localSections = processXmlSection(sections, sectionList);
                         //Se almacena la lista de sections al objeto
-                        menuItem.setSectionList(localSections);
+                        xmlMenuItem.setSectionList(localSections);
                     }//end if( sections.getAttributeValue("consult").charAt(0) == 'y') Se permite 'y' consultar las secciones
                     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 }
                 //Agrega un elemento a la lista de elementos del objeto principal
-                menuItemList.add(menuItem);
+                xmlMenuItemList.add(xmlMenuItem);
             }
         }
     }

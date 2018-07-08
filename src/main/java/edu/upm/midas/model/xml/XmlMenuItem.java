@@ -7,10 +7,10 @@ import java.util.List;
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
  * @project mayoclinic_text_extraction_rest
- * @className MenuItem
+ * @className XmlMenuItem
  * @see
  */
-public class MenuItem {
+public class XmlMenuItem {
 
     private String consult;
     private String id;
@@ -20,10 +20,10 @@ public class MenuItem {
     private List<XmlSection> sectionList;
 
 
-    public MenuItem() {
+    public XmlMenuItem() {
     }
 
-    public MenuItem(String consult, String id, String type, String name, String role) {
+    public XmlMenuItem(String consult, String id, String type, String name, String role) {
         this.consult = consult;
         this.id = id;
         this.type = type;
@@ -31,7 +31,7 @@ public class MenuItem {
         this.role = role;
     }
 
-    public MenuItem(String consult, String id, String type, String name, String role, List<XmlSection> sectionList) {
+    public XmlMenuItem(String consult, String id, String type, String name, String role, List<XmlSection> sectionList) {
         this.consult = consult;
         this.id = id;
         this.type = type;

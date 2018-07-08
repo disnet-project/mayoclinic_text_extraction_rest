@@ -19,11 +19,12 @@ public class XmlSource implements Serializable {
 
     private String consultSource;
     private Integer id;
+    private String code;
     private String name;
 
     private String link;//URL Principal de la fuente
 
-    private List<MenuItem> menuItemList;
+    private List<XmlMenuItem> xmlMenuItemList;
     private List<XmlSection> sectionList;
     private List<XmlHighlight> highlightList;
     private List<XmlLink> linkList;
@@ -54,6 +55,14 @@ public class XmlSource implements Serializable {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
@@ -70,12 +79,12 @@ public class XmlSource implements Serializable {
         this.link = link;
     }
 
-    public List<MenuItem> getMenuItemList() {
-        return menuItemList;
+    public List<XmlMenuItem> getXmlMenuItemList() {
+        return xmlMenuItemList;
     }
 
-    public void setMenuItemList(List<MenuItem> menuItemList) {
-        this.menuItemList = menuItemList;
+    public void setXmlMenuItemList(List<XmlMenuItem> xmlMenuItemList) {
+        this.xmlMenuItemList = xmlMenuItemList;
     }
 
     public List<XmlSection> getSectionList() {

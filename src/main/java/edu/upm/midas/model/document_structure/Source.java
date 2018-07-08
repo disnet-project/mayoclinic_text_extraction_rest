@@ -33,7 +33,18 @@ public class Source {
         this.name = name;
     }
 
+    public Source(int id, String code, String name) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+    }
 
+    public Source(int id, String code, String name, Link url) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.url = url;
+    }
 
     public int getId() {
         return id;
@@ -89,6 +100,7 @@ public class Source {
 
     public void setDocuments(List<Doc> documents) {
         this.documents = documents;
+        if (this.documents!=null) this.documentCount = this.documents.size();
     }
 
     public TreeMap<String, String> getSectionMap() {

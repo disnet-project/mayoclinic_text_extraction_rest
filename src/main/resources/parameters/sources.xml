@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sources>
-    <source consult="y" id="3">
+    <source consult="y" id="3" code="SO03">
         <name>mayoclinic</name>
-        <link>https://www.mayoclinic.org/</link>
+        <link>https://www.mayoclinic.org</link>
         <tablecontents consult="y" type="div" class="tableofcontents">
             <item consult="y" id="" role="menuitem" type="li" name="Symptoms &amp; causes" >
                 <sections consult="y" type="div" class="content">
@@ -20,6 +20,7 @@
             <tag consult="y" id="main-content" class="" role="main" type="div" desc="principal" />
             <tag consult="y" id="" class="alpha" type="ol" desc="disease_list" />
             <tag consult="y" id="index" class="index" type="div" desc="disease_sub_list" />
+            <tag consult="y" id="" class="tableofcontents" role="" type="div" desc="table_of_contents" />
             <tag consult="y" id="" class="" role="menubar" type="ul" desc="horizontal_menu_bar" />
         </highlights>
         <links consult="y">

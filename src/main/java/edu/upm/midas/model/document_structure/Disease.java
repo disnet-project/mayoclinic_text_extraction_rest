@@ -1,5 +1,8 @@
 package edu.upm.midas.model.document_structure;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,7 +20,25 @@ public class Disease {
     private String definition;
     private String cui;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer synonymCount;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private List<Synonym> synonyms;
 
+    public Disease() {
+    }
+
+    public Disease(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Disease(int id, String name, String definition, List<Synonym> synonyms) {
+        this.id = id;
+        this.name = name;
+        this.definition = definition;
+        this.synonyms = synonyms;
+    }
 
     public int getId() {
         return id;
@@ -51,6 +72,22 @@ public class Disease {
         this.cui = cui;
     }
 
+    public Integer getSynonymCount() {
+        return synonymCount;
+    }
+
+    public void setSynonymCount(Integer synonymCount) {
+        this.synonymCount = synonymCount;
+    }
+
+    public List<Synonym> getSynonyms() {
+        return synonyms;
+    }
+
+    public void setSynonyms(List<Synonym> synonyms) {
+        this.synonyms = synonyms;
+        if (synonyms!=null) this.synonymCount = synonyms.size();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -65,4 +102,16 @@ public class Disease {
         return Objects.hash(getCui());
     }
 
+
+    @Override
+    public String toString() {
+        return "Disease{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+//                ", definition='" + definition + '\'' +
+//                ", cui='" + cui + '\'' +
+//                ", synonymCount=" + synonymCount +
+//                ", synonyms=" + synonyms +
+                '}';
+    }
 }

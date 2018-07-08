@@ -24,7 +24,13 @@ public class Section {
     private Integer textCount;
     private List<Text> textList;
 
+    public Section() {
+    }
 
+    public Section(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public Integer getId() {
         return id;
@@ -66,4 +72,12 @@ public class Section {
         this.textList = textList;
     }
 
+
+    @Override
+    public String toString() {
+        return "Section{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

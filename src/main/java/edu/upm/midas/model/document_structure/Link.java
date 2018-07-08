@@ -22,12 +22,20 @@ public class Link {
     public Link() {
     }
 
+    public Link(int id, String url) {
+        this.id = id;
+        this.url = url;
+    }
+
     public Link(String url, Source source) {
         this.url = url;
         this.source = source;
     }
 
-
+    public Link(String url, String description) {
+        this.url = url;
+        this.description = description;
+    }
 
     public int getId() {
         return id;
@@ -72,5 +80,14 @@ public class Link {
     @Override
     public int hashCode() {
         return Objects.hash(getUrl());
+    }
+
+
+    @Override
+    public String toString() {
+        return "Link{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                '}';
     }
 }
