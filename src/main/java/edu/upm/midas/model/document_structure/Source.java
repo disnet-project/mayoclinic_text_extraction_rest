@@ -18,7 +18,6 @@ public class Source {
     private String code;
     private String name;
     private Link url;
-    private List<Link> urlList;
 
     private Integer documentCount;
     private List<Doc> documents;
@@ -76,14 +75,6 @@ public class Source {
 
     public void setUrl(Link url) {
         this.url = url;
-    }
-
-    public List<Link> getUrlList() {
-        return urlList;
-    }
-
-    public void setUrlList(List<Link> urlList) {
-        this.urlList = urlList;
     }
 
     public Integer getDocumentCount() {

@@ -55,6 +55,7 @@ public class MayoClinicExtraction {
 
 
     public void ini() {
+        System.out.println("Start ini...");
             this.sourceConf = getSourceConfiguration();
             this.mainSourceURL = this.sourceConf.getLink().trim();
             this.mainDiseaseListsURL = getPrincipalDiseaseListURL(this.sourceConf.getLinkList());
@@ -163,7 +164,7 @@ public class MayoClinicExtraction {
             //</editor-fold>
             //<editor-fold desc="LISTA DE ITEMS A MINAR">
             System.out.println("List of menu items...");//Symptoms & causes... etc
-            for (MenuItem menuItem:menuItemList) {System.out.println(menuItem.getName());}
+            for (MenuItem menuItem: menuItemList) {System.out.println(menuItem.getName());}
             //</editor-fold>
             //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             //<editor-fold desc="PROCESO PARA EXTRACCIÓN DE TEXTOS">
@@ -204,44 +205,70 @@ public class MayoClinicExtraction {
     }
 
 
-    public void textExtract(Doc diseaseArticle) throws Exception {
-        Document document;
-        // Se conecta con cada documento que tiene una lista de enfermedades
-        Connection_ connection_ = connectDocument.connect(diseaseArticle.getUrl().getUrl());
-        // Se verifica si hubo conexión con el documento (enlace Web)
-        // Se pinta en pantalla el status OK (esta disponible el enlace)
-        System.out.println(diseaseArticle.getId() + ". mayoclinicDiseaseExtract " + connection_.getLink() + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
-        //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
-        if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
-            document = connection_.getDocument();
-            createDocumentLinkList(document);
-        }else {//end if oConnect.connection_().equals("OK")
-            // Mensaje mostrado al documento que no se pudo conectar
-            System.out.println(connection_.getLink() + " ==> " + connection_.getStatus());
-        }//end else if oConnect.connection_().equals("OK")
+    /**
+     * @param disnetDocument
+     * @throws Exception
+     */
+    public void textExtract(Doc disnetDocument) throws Exception {
+        //Se conectara a los dos enlaces del documento donde hay secciones y textos
+        //<editor-fold desc="RECORRIDO DE LOS ENLACES DEL DOCUMENTO PARA EXTRAER DE SUS SECCIONES Y TEXTOS">
+        for (Link documentLink: disnetDocument.getUrlList()) {
+            List<Section> sectionSearchList = getSectionsListByMenuItemName(documentLink.getDescription());
+            Document document;
+            // Se conecta con cada documento que tiene una lista de enfermedades
+            Connection_ connection_ = connectDocument.connect(documentLink.getUrl());
+            // Se verifica si hubo conexión con el documento (enlace Web)
+            // Se pinta en pantalla el status OK (esta disponible el enlace)
+            System.out.println(disnetDocument.getId() + ". mayoclinicDiseaseExtract " + connection_.getLink() + " ==> " + connection_.getStatus() + "(" + connection_.getStatusCode() + ")");
+            //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
+            if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
+                document = connection_.getDocument();
+                extractSections(document);
+
+            } else {//end if oConnect.connection_().equals("OK")
+                // Mensaje mostrado al documento que no se pudo conectar
+                System.out.println(connection_.getLink() + " ==> " + connection_.getStatus());
+            }//end else if oConnect.connection_().equals("OK")
+            //</editor-fold>
+        }
         //</editor-fold>
 
 
     }
 
 
-    public List<Link> createDocumentLinkList(Document document){
-        List<Link> linkList = new ArrayList<>();
-            // Se obtiene de la configuración el ID del elemento HTML que almacena los enlaces relevantes del documento
-            String mainContentElementClass = getHighlightXmlByDescription(Constants.XML_HL_TABLE_OF_CONTENTS, sourceConf).getClass_();
-            Elements tableOfContentsElements = document.getElementsByClass(mainContentElementClass);
-            int counLink = 1;
-            for (Element item: tableOfContentsElements) {
-                for (Element link:item.getElementsByTag(Constants.HTML_A)) {
-//                System.out.println("QUE PASA: "+item.tagName() + " " + item.getElementsByTag("a"));
-                    System.out.println(link.ownText().trim());
-                    Link url = new Link(counLink, createCompleteURL(link.attr(Constants.HTML_HREF).trim()) );
-                    linkList.add(url);
-                    System.out.println(url);
-                    counLink++;
+    public void extractSections(Document document){
+
+        String articleTag = getHighlightXmlByDescription(Constants.XML_HL_BODY_ARTICLE, sourceConf).getType();
+        Elements articleContent = document.select(articleTag).select("div.content");
+
+        for (Element articleChild: articleContent) {
+            if (articleChild.tagName().equals(Constants.HTML_DIV)){
+                Element child = articleChild.firstElementSibling();
+                if (child.tagName().equals(Constants.HTML_DIV)){
+                    System.out.println("find: "+child.toString());
                 }
             }
-        return linkList;
+//            if (articleChild.select(Constants.HTML_DIV + ".content > p").)
+//            System.out.println("1. "+articleChild.toString());
+
+        }
+
+    }
+
+
+    /**
+     * @param description
+     * @return
+     */
+    public List<Section> getSectionsListByMenuItemName(String description){
+        List<Section> sectionList = new ArrayList<>();
+        for (MenuItem menuItem: menuItemList) {
+            if (menuItem.getName().equals(description)){
+                sectionList = menuItem.getSectionList();
+            }
+        }
+        return sectionList;
     }
 
 
@@ -394,17 +421,109 @@ public class MayoClinicExtraction {
                     countDoc++;
                 }
                 countList++;
+                if (countList==1) break;
                 //</editor-fold>
             } else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar
                 System.out.println(completeLink + " ==> " + connection_.getStatus());
             }//end else if oConnect.connection_().equals("OK")
             //</editor-fold>
-
-
         }
+
+        //<editor-fold desc="PROCESO PARA RECUPERAR LOS ENLACES RELEVANTES DEL DOCUMENTO">
+        getAllRelevantLinksFromTheDocument(documentList);
+        //</editor-fold>
+
         System.out.println(documentList.size() + " unique disease articles found in MayoClinic to " + countDoc);
         return documentList;
+    }
+
+
+    /**
+     * Método que busca en un artículo de enfermedad los enlaces de los item relevantes de la tabla de contenidos.
+     *
+     * Cada tiene secciones y textos. En la configuración base se buscan los enlaces de los item:
+     * "Symptoms & causes" y "Diagnosis & treatment".
+     *
+     * Cada artículo MayoClinic al menos debe tener alguno de estos dos items pero no todos tienen secciones
+     * relevantes ni textos relevantes.
+     *
+     * @param disnetDocuments
+     * @throws Exception
+     */
+    public void getAllRelevantLinksFromTheDocument(List<Doc> disnetDocuments) throws Exception {
+        for (Doc disnetDocument: disnetDocuments){
+            Document document;
+            // Se conecta con cada documento que tiene una lista de enfermedades
+            Connection_ connection_ = connectDocument.connect(disnetDocument.getUrl().getUrl());
+            // Se verifica si hubo conexión con el documento (enlace Web)
+            // Se pinta en pantalla el status OK (esta disponible el enlace)
+            System.out.println(disnetDocument.getId() + ". mayoclinicLinksDiseaseExtract " + connection_.getLink() + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
+            //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
+            if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
+                document = connection_.getDocument();
+                disnetDocument.setUrlList( getDocumentLinkList(document, disnetDocument) );
+            }else {//end if oConnect.connection_().equals("OK")
+                // Mensaje mostrado al documento que no se pudo conectar
+                System.out.println(connection_.getLink() + " ==> " + connection_.getStatus());
+            }//end else if oConnect.connection_().equals("OK")
+            //</editor-fold>
+        }
+    }
+
+
+    /**
+     * Método que según un documento JSOUP extrae los enlaces de los elementos de la tabla de contenido del artículo
+     * de enfermedad
+     *
+     * @param document
+     * @return
+     */
+    public List<Link> getDocumentLinkList(Document document, Doc disnetDocument){
+        List<Link> linkList = new ArrayList<>();
+        // Se obtiene del xml de configuración el class del elemento HTML que almacena los enlaces relevantes del documento
+        String mainContentElementClass = getHighlightXmlByDescription(Constants.XML_HL_TABLE_OF_CONTENTS, sourceConf).getClass_();
+        //Obtiene los elementos hijos segunla clase
+        Elements tableOfContentsElements = document.getElementsByClass(mainContentElementClass);
+        int counLink = 1;
+        //Se recorren los hijos
+        for (Element item: tableOfContentsElements) {
+            //Por cada hijo se obtiene su elemento <a>
+            for (Element link:item.getElementsByTag(Constants.HTML_A)) {
+//                System.out.println("QUE PASA: "+item.tagName() + " " + item.getElementsByTag("a"));
+                if (isRelevantMenuItem(link.ownText().trim(), false, disnetDocument)) {
+//                        System.out.println(link.ownText().trim());
+                    Link url = new Link(counLink, createCompleteURL(link.attr(Constants.HTML_HREF).trim()), link.ownText().trim());
+                    linkList.add(url);
+//                    System.out.println(url);
+                    counLink++;
+                }
+            }
+        }
+        return linkList;
+    }
+
+
+    /**
+     * @param menuItemName
+     * @return
+     */
+    public boolean isRelevantMenuItem(String menuItemName, boolean addSections, Doc disnetDocument){
+        boolean res = false;
+        for (MenuItem menuItem: menuItemList) {
+//            System.out.println(menuItemName +" == "+ menuItem.getName());
+            if (menuItemName.equals(menuItem.getName())){
+                res = true;
+                if (addSections){ addSections(disnetDocument, menuItem);}
+                break;
+            }
+        }
+        return res;
+    }
+
+
+    public void addSections(Doc disnetDocument, MenuItem menuItem){
+        disnetDocument.setSectionList(menuItem.getSectionList());
     }
 
 
@@ -455,6 +574,7 @@ public class MayoClinicExtraction {
                 for (Element link: linkList) {
 //                    System.out.println(link.attr(Constants.HTML_HREF));
                     listOfTheDiseaseList.add(link.attr(Constants.HTML_HREF).trim());
+                    break;
                 }
             } else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar

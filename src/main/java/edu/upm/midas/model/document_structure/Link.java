@@ -27,6 +27,12 @@ public class Link {
         this.url = url;
     }
 
+    public Link(int id, String url, String description) {
+        this.id = id;
+        this.url = url;
+        this.description = description;
+    }
+
     public Link(String url, Source source) {
         this.url = url;
         this.source = source;
