@@ -187,6 +187,7 @@ public class Constants {
     public static final String XML_HL_TABLE_OF_CONTENTS = "table_of_contents";
     public static final String XML_HL_HORIZONTAL_MENU_BAR = "horizontal_menu_bar";
     public static final String XML_HL_BODY_ARTICLE = "body_article";
+    public static final String XML_HL_CONTENT_CLASS = "content";
 
 
     /**

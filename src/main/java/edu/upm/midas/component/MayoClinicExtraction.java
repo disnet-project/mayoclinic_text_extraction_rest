@@ -180,7 +180,7 @@ public class MayoClinicExtraction {
             System.out.println("---------------------------------------------------");
             int countDisnetDoc = 1;
             for (Doc disnetDocument: source.getDocuments()){
-                textExtract(disnetDocument);
+                retrieveMedicalKnowledge(disnetDocument);
                 countDisnetDoc++;
             }
             System.out.println("---------------------------------------------------");
@@ -209,7 +209,7 @@ public class MayoClinicExtraction {
      * @param disnetDocument
      * @throws Exception
      */
-    public void textExtract(Doc disnetDocument) throws Exception {
+    public void retrieveMedicalKnowledge(Doc disnetDocument) throws Exception {
         //Se conectara a los dos enlaces del documento donde hay secciones y textos
         //<editor-fold desc="RECORRIDO DE LOS ENLACES DEL DOCUMENTO PARA EXTRAER DE SUS SECCIONES Y TEXTOS">
         for (Link documentLink: disnetDocument.getUrlList()) {
@@ -223,7 +223,7 @@ public class MayoClinicExtraction {
             //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
             if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                 document = connection_.getDocument();
-                extractSections(document);
+                extractSections(document, sectionSearchList);
 
             } else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar
@@ -237,23 +237,72 @@ public class MayoClinicExtraction {
     }
 
 
-    public void extractSections(Document document){
-
+    public void extractSections(Document document, List<Section> sectionList){
+        //Obtiene la etiqueta "tag" general que contiene las secctiones y textos
         String articleTag = getHighlightXmlByDescription(Constants.XML_HL_BODY_ARTICLE, sourceConf).getType();
-        Elements articleContent = document.select(articleTag).select("div.content");
+        //Obtiene el nombre de la clase content
+        String contentClass = getHighlightXmlByDescription(Constants.XML_HL_CONTENT_CLASS, sourceConf).getClass_();
+        //Obtiene el primer elemento de la etiqueta <article> y el div con clase "content"
+        Element articleContent = document.select(articleTag).select(Constants.HTML_DIV + Constants.DOT + contentClass).first();
 
-        for (Element articleChild: articleContent) {
-            if (articleChild.tagName().equals(Constants.HTML_DIV)){
-                Element child = articleChild.firstElementSibling();
-                if (child.tagName().equals(Constants.HTML_DIV)){
-                    System.out.println("find: "+child.toString());
-                }
+        //Se obtiene el elemento padre que contiene solo las secciones relevantes y sus textos
+//        System.out.println("PARENT. "+getParentElement(articleContent, sectionList));
+        Element parentElement = getParentElement(articleContent, sectionList);
+
+        //Obtener todos los textos de las secciones relevantes
+
+    }
+
+
+    /**
+     * Método que retorna el padre del elemento <h2></h2> que contenga como texto el nombre de alguna
+     * de las secciones relvantes.
+     *
+     * Con el fin de obtener el elemento padre que es el elemento raíz donde se hará la minería de texto.
+     *
+     * Retorna el elemento raíz de la extracción de textos del documento.
+     *
+     * @param element
+     * @param sectionList
+     * @return
+     */
+    public Element getParentElement(Element element, List<Section> sectionList){
+        Element parentElement = null;
+        //Obtiene todos los elementos <h2> del contenido principal
+        Elements h2Elements = element.getElementsByTag(Constants.HTML_H2);
+        //Se recorren todos los elementos <h2> encontrados
+        for (Element h2Element: h2Elements) {
+            //Se obtiene el texto propio de cada elemento
+            //Y si el nombre se encuentra en la lista de secciones relevantes, retornamos el padre de esta etiqueta
+//            System.out.println("h2Element. " + h2Element.ownText());
+            if (isRelevantSection(h2Element.ownText(), sectionList)){
+                //Se obtiene el elemento padre para retornarlo
+                parentElement = h2Element.parent();
+                break;
             }
-//            if (articleChild.select(Constants.HTML_DIV + ".content > p").)
-//            System.out.println("1. "+articleChild.toString());
-
         }
+        return parentElement;
+    }
 
+
+    /**
+     * Método que verifica según un nombre de una sección si es relevante o no.
+     *
+     * Se le pasa como parametros el nombre de la sección a validar y la lista de
+     * secciones relevantes.
+     *
+     * @param sectionName
+     * @param sectionList
+     * @return
+     */
+    public boolean isRelevantSection(String sectionName, List<Section> sectionList){
+        boolean res = false;
+        for (Section section: sectionList) {
+            if (section.getName().equals(sectionName)){
+                res = true;break;
+            }
+        }
+        return res;
     }
 
 
@@ -463,6 +512,7 @@ public class MayoClinicExtraction {
             if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                 document = connection_.getDocument();
                 disnetDocument.setUrlList( getDocumentLinkList(document, disnetDocument) );
+                break;
             }else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar
                 System.out.println(connection_.getLink() + " ==> " + connection_.getStatus());
