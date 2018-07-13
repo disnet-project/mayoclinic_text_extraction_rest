@@ -116,6 +116,11 @@ public class MayoClinicExtraction {
      * @return lista de fuentes de información "Source". Para ser insertados en la BD.
      * @throws Exception
      *              Puede lanzar una excepción
+     *
+     * @see
+     *              createDocumentList
+     *              retrieveMedicalKnowledge
+     *
      */
     public List<Source> extract(String snapshot) throws Exception {
         //<editor-fold desc="VARIABLES DE INICO">
@@ -187,10 +192,17 @@ public class MayoClinicExtraction {
 
 
     /**
-     * Método que a partir de una
+     * Método que crea documentos DISNET y los relaciona con enfermedades y ellas con sus sinónimos.
+     *
+     * A partir de las diferentes listas de enfermedades (nombradas por cada letra del alfabeto inglés), básicamente
+     * una lista que contiene otras listas (lista general).
+     *
+     * Este método se encarga de conectarse a cada elemento de la lista general y recuperar la URL y el nombre
+     * de una enfermedad (o documento de enfermedad).
      *
      * @param snapshot
-     * @return
+     *              Recibe la fecha de la snapshot
+     * @return  Retorna la lista de documentos DISNET relacionados con su enfermedad
      * @throws Exception
      */
     public List<Doc> createDocumentList(String snapshot) throws Exception {//Second disease list
