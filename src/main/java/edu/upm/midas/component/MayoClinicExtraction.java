@@ -161,7 +161,7 @@ public class MayoClinicExtraction {
             System.out.println("START Procesing and extracting articles texts...");
             System.out.println("---------------------------------------------------");
             for (Doc disnetDocument: source.getDocuments()){
-                retrieveMedicalKnowledge(disnetDocument);
+                retrieveMedicalKnowledge(disnetDocument, source.getDocuments().size());
             }
             System.out.println("---------------------------------------------------");
             System.out.println("END Procesing and extracting articles texts...");
@@ -204,7 +204,7 @@ public class MayoClinicExtraction {
             connection_ = connectDocument.connect(completeLink);
             // Se verifica si hubo conexión con el documento (enlace Web)
             // Se pinta en pantalla el status OK (esta disponible el enlace)
-            System.out.println(countList + ". mayoclinicExtract " + completeLink + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
+            System.out.println("    " + countList + " to " + listOfTheDiseaseList.size() + ". mayoclinicExtract " + completeLink + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
             //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
             if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                 //Variables para controlar la url de la enfermedad y su nombre
@@ -459,7 +459,7 @@ public class MayoClinicExtraction {
      *              getSectionsListByMenuItemName
      *              extractDocumentContent
      */
-    public void retrieveMedicalKnowledge(Doc disnetDocument) throws Exception {
+    public void retrieveMedicalKnowledge(Doc disnetDocument, int size) throws Exception {
         List<Section> sections = new ArrayList<>();
         if (disnetDocument.getUrlList()!=null) {
             //Se conectara a los dos enlaces del documento donde hay secciones y textos
@@ -473,7 +473,7 @@ public class MayoClinicExtraction {
                 Connection_ connection_ = connectDocument.connect(documentLink.getUrl());
                 // Se verifica si hubo conexión con el documento (enlace Web)
                 // Se pinta en pantalla el status OK (esta disponible el enlace)
-                System.out.println(disnetDocument.getId() + ". mayoclinicDiseaseExtract " + connection_.getLink() + " ==> " + connection_.getStatus() + "(" + connection_.getStatusCode() + ")");
+                System.out.println(disnetDocument.getId() + " to " + size + ". mayoclinicDiseaseExtract " + connection_.getLink() + " ==> " + connection_.getStatus() + "(" + connection_.getStatusCode() + ")");
                 //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
                 if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                     //Se crea el documento de la página Web
