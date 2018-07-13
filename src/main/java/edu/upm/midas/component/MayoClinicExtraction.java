@@ -183,8 +183,8 @@ public class MayoClinicExtraction {
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         }//--VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE MAYOCLINIC
         System.out.println("End to document_structure...");
-        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-        System.out.print(gson.toJson(sourceList));
+//        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+//        System.out.print(gson.toJson(sourceList));
         //</editor-fold>
         // Retorna la lista de fuentes, con sus documentos, enfermedades, secciones, códigos y textos...
         return sourceList;
