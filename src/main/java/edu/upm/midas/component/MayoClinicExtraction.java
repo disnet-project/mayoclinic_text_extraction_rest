@@ -190,7 +190,7 @@ public class MayoClinicExtraction {
         Connection_ connection_;
         Document document;
 
-        //<editor-fold desc="CARGA DE LA CONFIGURACIÓN DE LA FUENTE Y LAS LISTAS DE ENFERMEDADES">
+        //<editor-fold desc="CARGA LAS LISTAS DE ENFERMEDADES">
         List<String> listOfTheDiseaseList = getListOfDiseaseListFromPrincipalLink();
         //</editor-fold>
 
@@ -295,7 +295,7 @@ public class MayoClinicExtraction {
                     countDoc++;
                 }
                 countList++;
-                if (countList==1) break;
+//                if (countList==1) break;
                 //</editor-fold>
             } else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar
@@ -360,7 +360,7 @@ public class MayoClinicExtraction {
                 for (Element link: linkList) {
 //                    System.out.println(link.attr(Constants.HTML_HREF));
                     listOfTheDiseaseList.add(link.attr(Constants.HTML_HREF).trim());
-                    break;
+//                    break;
                 }
             } else {//end if oConnect.connection_().equals("OK")
                 // Mensaje mostrado al documento que no se pudo conectar
