@@ -204,7 +204,7 @@ public class MayoClinicExtraction {
             connection_ = connectDocument.connect(completeLink);
             // Se verifica si hubo conexión con el documento (enlace Web)
             // Se pinta en pantalla el status OK (esta disponible el enlace)
-            System.out.println("    " + countList + " to " + listOfTheDiseaseList.size() + ". mayoclinicExtract " + completeLink + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
+            System.out.println(countList + " to " + ". mayoclinicExtract " + completeLink + " ==> " + connection_.getStatus() + "("+connection_.getStatusCode()+")");
             //<editor-fold desc="SI SE HA CONECTADO CON EL DOCUMENTO EXITOSAMENTE">
             if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                 //Variables para controlar la url de la enfermedad y su nombre

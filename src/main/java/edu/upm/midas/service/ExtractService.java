@@ -70,10 +70,10 @@ public class ExtractService {
         //<editor-fold desc="ESCRIBIR JSON CON LA RESPUESTA">
         if (request.isJson()) {
             try {
-                logger.info("Saving initiated Wikipedia texts");
+                logger.info("Saving initiated MayoClinic texts in a JSON");
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 common.writeJSONFile(gson.toJson(response), snapshot /*timeProvider.dateFormatyyyMMdd(snapshot)*/, Constants.RETRIEVAL_FILE_NAME);
-                logger.info("Saving of finished Wikipedia texts");
+                logger.info("Saving of finished MayoClinic texts in a JSON");
             } catch (Exception e) {
                 logger.error("Error while save json {} ", snapshot /*timeProvider.dateFormatyyyMMdd(snapshot)*/ + Constants.RETRIEVAL_FILE_NAME + Constants.DOT_JSON);
             }
