@@ -4,7 +4,7 @@ package edu.upm.midas.model;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project wikipedia_text_extraction_rest
+ * @project mayoclinic_text_extraction_rest
  * @className ResponseJSON
  * @see
  */

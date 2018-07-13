@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @className List_
  * @see
  */

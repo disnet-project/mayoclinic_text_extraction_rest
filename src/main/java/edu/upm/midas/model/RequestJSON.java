@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project wikipedia_text_extraction_rest
+ * @project mayoclinic_text_extraction_rest
  * @className RequestJSON
  * @see
  */

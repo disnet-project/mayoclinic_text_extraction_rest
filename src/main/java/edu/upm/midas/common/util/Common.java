@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className Validations
  * @see
  */

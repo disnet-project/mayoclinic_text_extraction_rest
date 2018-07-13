@@ -7,7 +7,7 @@ import org.jsoup.nodes.Document;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className Connection_
  * @see
  */

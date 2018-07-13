@@ -96,20 +96,26 @@ public class MayoClinicExtraction {
     }
 
     /**
-     * Método para extraer información de una página Web de Wikipedia (documento)
-     * Datos a estraer: 1) códigos del infobox, 2) secciones establecidas que hablan
-     * de los signos o síntomas de una enfermedad y 3) sus enlaces (url)
+     * Método para extraer información médica de MayoClinic.
      *
-     * Lee las clases que obtuvieron información del archivo de configuración XML.
+     * Primero, extrae una lista (lista general) de los enlaces de cada una de las listas de enfermedades.
      *
-     * Almacenará toda la información extraida desde wikipedia en una estructura de clases
-     * hecha a medida de las páginas Web de wikipedia.
+     * Segundo, extrae de cada uno de los elementos de la lista general, los enlaces de cada enfermedad, formando
+     * la lista principal de enfermedades.
      *
-     * Dicha estructura posteriormente se leerá para dar paso a insertar la información almacenada
-     * en la base de datos genérica para diferentes tipos de fuentes "Sources".
+     * Tercero, se conecta a cada elemento de la lista principal de enfermedades y obtiene dos enlaces de la tabla
+     * de contenidos del documento relativo a una enfermedad, estos dos enlaces, uno habla de los síntomas de la
+     * enfermedad y sus causas y el otro enlace habla del diagnóstico de la enfermedad.
+     *
+     * Cuarto, cada documento de enfermedad por lo tanto tiene dos URLs para minar.
+     *
+     * La información que se recupera de cada documento son solo textos (párrafos y listas).
+     *
+     * No hay códigos de enfermedad.
      *
      * @return lista de fuentes de información "Source". Para ser insertados en la BD.
      * @throws Exception
+     *              Puede lanzar una excepción
      */
     public List<Source> extract(String snapshot) throws Exception {
         //<editor-fold desc="VARIABLES DE INICO">
@@ -124,11 +130,11 @@ public class MayoClinicExtraction {
         // --------- Inicio del proceso de extracción
         // Se inicializa la lista de "Source"
         sourceList = new ArrayList<>();
-        // Se leen y recorren los "Sources": wikipedia, medline, etc. NOTA. Aquí solo se leen páginas de wikipedia.
+        // Se leen y recorren los "Sources": mayoclinic, wikipedia, medline, etc. NOTA. Aquí solo se leen páginas de mayoclinic.
         //<editor-fold desc="LEER ARCHIVO DE CONFIGURACION">
 //        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 //        System.out.print( gson.toJson(sourceConf) );
-        // VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE WIKIPEDIA
+        // VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE MAYOCLINIC
         if (sourceConf.getName().equals(Constants.SOURCE_MAYOCLINIC)) {
             //<editor-fold desc="FUENTE">
             // Se crea el enlace de la fuente
@@ -166,10 +172,11 @@ public class MayoClinicExtraction {
             System.out.println("---------------------------------------------------");
             System.out.println("END Procesing and extracting articles texts...");
             System.out.println("---------------------------------------------------");
+            sourceList.add(source);
             //</editor-fold>
             //</editor-fold>
             //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-        }//--VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE WIKIPEDIA
+        }//--VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE MAYOCLINIC
         System.out.println("End to document_structure...");
         Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
         System.out.print(gson.toJson(sourceList));
@@ -180,6 +187,8 @@ public class MayoClinicExtraction {
 
 
     /**
+     * Método que a partir de una
+     *
      * @param snapshot
      * @return
      * @throws Exception
@@ -645,7 +654,7 @@ public class MayoClinicExtraction {
             // Extrae el texto si es una etiqueta <ul> o <ol> o <dl>
             } else if (isElementIsATypeOfList(element.tagName())) {//&& !nextElementBro.text().isEmpty()
                 //<editor-fold desc="EXTRAE TEXTO DE UN PARRAFO Y LO ALMACENA EN UN OBJETO LIST_">
-                // Guarda la información extraida de una lista wikipedia en un objeto
+                // Guarda la información extraida de una lista mayoclinic en un objeto
                 List_ list_ = setList_Data(element, countText, getTitle(element));
                 if (list_!=null) {//System.out.println("ENTRA_list_");
                     isText = true;
@@ -858,14 +867,14 @@ public class MayoClinicExtraction {
      */
     public List<Doc> extractDiseaseList(String snapshot) throws Exception {
         List<Doc> documentList = new ArrayList<>();
-        // Se leen y recorren los "Sources": wikipedia, medline, etc. NOTA. Aquí solo se leen páginas de wikipedia.
+        // Se leen y recorren los "Sources": mayoclinic, wikipedia, medline, etc. NOTA. Aquí solo se leen páginas de wikipedia.
         //<editor-fold desc="LEER ARCHIVO DE CONFIGURACION">
 //        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
 //        System.out.print( gson.toJson(loadSource.loadSource()) );
 //        for (XmlSource xmlSource : loadSource.loadSource())
         XmlSource xmlSource = loadSource.loadSource();
         if (xmlSource!=null){
-            // VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE WIKIPEDIA
+            // VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE MAYOCLINIC
             if (xmlSource.getName().equals(Constants.SOURCE_MAYOCLINIC)) {
                 //<editor-fold desc="LISTA DE LAS LISTAS DE ENFERMEDADES">
                 //Se obtiene las listas generales de enfermedades en orden alfabético
@@ -880,7 +889,7 @@ public class MayoClinicExtraction {
                 //<editor-fold desc="PROCESO PARA EXTRACCIÓN DE TEXTOS">
                 System.out.println("Procesing links and extracting...");
                 //</editor-fold>
-            }//--VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE WIKIPEDIA
+            }//--VALIDAR QUE SOLO SE RECUPERE INFORMACIÓN DE MAYOCLNIC
             System.out.println("End to document_structure...");
         }
         //</editor-fold>
@@ -1084,8 +1093,12 @@ public class MayoClinicExtraction {
     }
 
     /**
+     * Método que retorna la URL de la fuente (la raíz) que contiene la lista de listas de enfermedades.
+     *
      * @param linkList
+     *              Recibe una lista de URLs raíz a minar
      * @return
+     *              Retorna la URL de la página Web general de extracción
      */
     public String getPrincipalDiseaseListURL(List<XmlLink> linkList){
         String principalLink = "";

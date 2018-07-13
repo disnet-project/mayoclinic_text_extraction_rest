@@ -7,7 +7,7 @@ import edu.upm.midas.model.xml.title.Title;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @className XmlSectionFather
  * @see
  */

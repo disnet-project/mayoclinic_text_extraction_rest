@@ -19,7 +19,7 @@ import java.net.URLEncoder;
 
 /**
  * Created by gerardo on 29/3/17.
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @version ${<VERSION>}
  * @author Gerardo Lagunes G.
  * @className ConnectDisease
@@ -51,7 +51,6 @@ public class ConnectDocument {
         //Response oResponse; ya no se usa
         Connection_ connection_ = new Connection_();
         connection_.setLink( link );
-        //http://en.wikipedia.org/wiki/
         //System.out.println(URLEncoder.encode(common.cutStringPerformance(30, 0,Constants.HTTP_HEADER +link), "UTF-8"));
 
         try {//Constants.HTTP_HEADER +
@@ -76,7 +75,6 @@ public class ConnectDocument {
 
 
     public Connection_ tryConnect(Connection_ connection_) throws UnsupportedEncodingException {
-        //http://en.wikipedia.org/wiki/
         String convertLink = Constants.HTTPS_HEADER + "www.mayoclinic.org/" + URLEncoder.encode(common.cutStringPerformance(26, 0, connection_.getLink()), "UTF-8");
         System.out.println(connection_.getLink()+ " - " +convertLink);
 

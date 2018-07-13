@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @className StatusHttpEnum
  * @see
  */

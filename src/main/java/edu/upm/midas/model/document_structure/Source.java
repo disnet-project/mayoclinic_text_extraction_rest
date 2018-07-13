@@ -8,7 +8,7 @@ import java.util.TreeMap;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className LoadSource
  * @see
  */

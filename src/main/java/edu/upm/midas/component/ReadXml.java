@@ -25,7 +25,7 @@ import java.util.Set;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className ReadXml
  * @see
  */

@@ -5,7 +5,7 @@ package edu.upm.midas.model.document_structure.text;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @className Paragraph
  * @see
  */

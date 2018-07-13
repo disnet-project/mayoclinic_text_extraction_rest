@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className Resource
  * @see
  */

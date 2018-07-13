@@ -48,7 +48,7 @@ public class ExtractService {
         String end;
         String snapshot = timeProvider.getNowFormatyyyyMMdd();
 
-//        try {
+        try {
             sourceList = mayoClinicExtraction.extract(request.getSnapshot());
             if (sourceList!=null) {
                 response.setSources(sourceList);
@@ -58,11 +58,11 @@ public class ExtractService {
                 response.setResponseCode(ApiErrorEnum.RESOURCES_NOT_FOUND.getKey());
                 response.setResponseMessage(ApiErrorEnum.RESOURCES_NOT_FOUND.getDescription());
             }
-//        }catch (Exception e){
-//            response.setSources(new ArrayList<>());
-//            response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
-//            response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
-//        }
+        }catch (Exception e){
+            response.setSources(new ArrayList<>());
+            response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
+            response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
+        }
         response.setSources(sourceList);
         response.setStart_time(start);
         end = timeProvider.getTimestampFormat();

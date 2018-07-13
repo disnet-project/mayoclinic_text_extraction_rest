@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationDiseasesWikipedia
+ * @project ExtractionInformationDiseasesMayoClinic
  * @className CurrentDate
  * @see
  */

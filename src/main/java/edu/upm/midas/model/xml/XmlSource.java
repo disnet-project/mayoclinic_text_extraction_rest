@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Created by gerardo on 27/3/17.
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @version ${<VERSION>}
  * @author Gerardo Lagunes G.
  * @className XmlSource

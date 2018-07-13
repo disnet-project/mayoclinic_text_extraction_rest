@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * Created by gerardo on 29/3/17.
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @version ${<VERSION>}
  * @author Gerardo Lagunes G.
  * @className Disease

@@ -4,7 +4,7 @@ package edu.upm.midas.model.xml;
  *
  * @author Gerardo Lagunes G. ${EMAIL}
  * @version ${<VERSION>}
- * @project ExtractionInformationWikipedia
+ * @project ExtractionInformationMayoClinic
  * @className XmlHighlight
  * @see
  */
