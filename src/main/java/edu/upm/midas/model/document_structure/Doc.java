@@ -2,6 +2,7 @@ package edu.upm.midas.model.document_structure;
 
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.upm.midas.model.document_structure.code.Code;
 
 import java.util.List;
@@ -27,7 +28,9 @@ public class Doc {
     private Disease disease;
     private Integer sectionCount;
     private List<Section> sectionList;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer codeCount;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Code> codeList;
 
 
@@ -106,12 +109,18 @@ public class Doc {
         this.sectionCount = sectionCount;
     }
 
+    public void updateCounts() {
+        if (this.sectionList!=null) this.sectionCount = this.sectionList.size();
+        if (this.codeList!=null) this.codeCount = this.codeList.size();
+    }
+
     public List<Section> getSectionList() {
         return sectionList;
     }
 
     public void setSectionList(List<Section> sectionList) {
         this.sectionList = sectionList;
+        if (this.sectionList!=null) this.sectionCount = this.sectionList.size();
     }
 
     public Integer getCodeCount() {
@@ -140,8 +149,8 @@ public class Doc {
                 ", hasConnected=" + hasConnected +
                 ", diseaseArticle=" + diseaseArticle +
                 ", disease=" + disease +
-//                ", sectionCount=" + sectionCount +
-//                ", sectionList=" + sectionList +
+                ", sectionCount=" + sectionCount +
+                ", sectionList=" + sectionList +
 //                ", codeCount=" + codeCount +
 //                ", codeList=" + codeList +
                 '}';

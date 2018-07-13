@@ -70,6 +70,8 @@ public class Section {
 
     public void setTextList(List<Text> textList) {
         this.textList = textList;
+        if (this.textList!=null) this.textCount = this.textList.size();
+
     }
 
 
@@ -78,6 +80,9 @@ public class Section {
         return "Section{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", textCount=" + textCount +
+                ", textList=" + textList +
                 '}';
     }
 }

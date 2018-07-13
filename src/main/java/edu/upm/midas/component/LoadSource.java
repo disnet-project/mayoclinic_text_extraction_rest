@@ -4,6 +4,7 @@ import edu.upm.midas.constants.Constants;
 import edu.upm.midas.model.xml.XmlSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -35,24 +37,49 @@ public class LoadSource {
     @Autowired
     private ReadXml oReadXml;
 
-    public List<XmlSource> loadSources() throws Exception {
-
-//        File xmlFile = new File( Constants.XML_SOURCE_FOLDER + Constants.XML_SOURCE_FILE );
-        ClassPathResource classPathResource = new ClassPathResource(Constants.XML_CONFIG_FOLDER + Constants.XML_CONFIG_FILE + Constants.DOT_XML);
-        InputStream inputStream = classPathResource.getInputStream();
-        File xmlFile = File.createTempFile(Constants.XML_CONFIG_FILE, Constants.DOT_XML);
-        System.out.println(xmlFile.toString());
+    /**
+     * Método que carga todas las configuraciones de fuentes que se encuentren en el archivo XML de configuración.
+     *
+     * Carga el archivo desde dentro del JAR creando una en stream y creando un template del archivo.
+     *
+     * Puede haber muchas configuraciones de muchas fuentes.
+     *
+     * Las configuraciones que se cargan son acerca de los elementos que se quieren extraer o que son necesarios
+     * para la extracción de los textos.
+     *
+     * @return
+     *      La configuraciones de la fuente a hacer minería de texto
+     */
+    public XmlSource loadSource()  {
+//        List<XmlSource> xmlSources = null
+        XmlSource xmlSource = null;
         try {
-            FileUtils.copyInputStreamToFile(inputStream, xmlFile);
-            oReadXml.file( xmlFile );
+//        File xmlFile = new File( Constants.XML_SOURCE_FOLDER + Constants.XML_SOURCE_FILE );
+            ClassPathResource classPathResource = new ClassPathResource(Constants.XML_CONFIG_FOLDER + Constants.XML_CONFIG_FILE + Constants.DOT_XML);
+            InputStream inputStream = classPathResource.getInputStream();
+            File xmlFile = File.createTempFile(Constants.XML_CONFIG_FILE, Constants.DOT_XML);
+            System.out.println(xmlFile.toString());
+            try {
+                FileUtils.copyInputStreamToFile(inputStream, xmlFile);
+                oReadXml.file(xmlFile);
+            } catch (Exception e) {
+                logger.error("Error adding disease {}", xmlFile, e);
+            } finally {
+                IOUtils.closeQuietly(inputStream);
+            }
         }catch (Exception e){
-            logger.error("Error adding disease {}", xmlFile, e);
-        } finally {
-            IOUtils.closeQuietly(inputStream);
+            logger.error("Error creating template xml source configuration file {}", e);
         }
-
-
-        return oReadXml.read();
+        try {
+            xmlSource = oReadXml.read();
+        } catch (JDOMException e) {
+//            e.printStackTrace();
+            logger.error("Error 1 reading xml source configuration {}", e);
+        } catch (IOException e) {
+//            e.printStackTrace();
+            logger.error("Error 2 reading xml source configuration {}", e);
+        }
+        return xmlSource;
 
     }
 

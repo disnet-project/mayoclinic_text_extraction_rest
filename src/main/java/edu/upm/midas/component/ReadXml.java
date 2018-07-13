@@ -6,11 +6,15 @@ import edu.upm.midas.model.xml.title.*;
 import edu.upm.midas.common.util.Common;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,8 +32,9 @@ import java.util.Set;
 @Component
 public class ReadXml {
 
-    private XmlSource oXml = new XmlSource();
+    private static final Logger logger = LoggerFactory.getLogger(ReadXml.class);
 
+    private XmlSource oXml = new XmlSource();
     @Autowired
     private Common common;
 
@@ -39,78 +44,84 @@ public class ReadXml {
      * @return
      * @throws Exception
      */
-    public List<XmlSource> read() throws Exception{
+    public XmlSource read() throws JDOMException, IOException {
 
-        ArrayList<XmlSource> xmlList = new ArrayList<>();
+//        ArrayList<XmlSource> xmlList = new ArrayList<>();
+        XmlSource sourceConfiguration = null;
         ArrayList<XmlMenuItem> xmlMenuItemList = new ArrayList<>();
         ArrayList<XmlSection> sectionList = new ArrayList<>();
         ArrayList<XmlHighlight> highlightList = new ArrayList<>();
         ArrayList<XmlLink> linkList = new ArrayList<>();
 
-        SAXBuilder constructorXml = new SAXBuilder();
         File xmlFile = oXml.getXmlFile(); //new File(FacesContext.getCurrentInstance().getExternalContext().getRealPath("/") + "/resources/bd/bd.xml");
+        try {
+            SAXBuilder constructorXml = new SAXBuilder();
+            //Se crea el documento a traves del archivo
+            Document docXml = constructorXml.build(xmlFile);
+            //Se obtiene la raiz 'sources'
+            Element rootSources = docXml.getRootElement();
+            //Se obtiene los hijos 'source' de la raiz 'sources'
+//            List sourceList = rootSources.getChildren(Constants.XML_ROOT_TAG);
+            Element source = rootSources.getChildren(Constants.XML_ROOT_TAG).get(0);
+            //Se recorren los hijos de 'source'
+            //<editor-fold desc="RECORRIDO DE LAS FUENTES EXISTENTES (SOLO HAY UNA)">
+//            for (int i = 0; i < sourceList.size(); i++)
+            if (source!=null){
+                oXml = new XmlSource();
 
-        //Se crea el documento a traves del archivo
-        Document docXml = (Document) constructorXml.build( xmlFile );
-        //Se obtiene la raiz 'sources'
-        Element rootSources = docXml.getRootElement();
-        //Se obtiene los hijos 'source' de la raiz 'sources'
-        List sourceList = rootSources.getChildren( Constants.XML_ROOT_TAG );
-        //Se recorren los hijos de 'source'
-        for ( int i = 0; i < sourceList.size(); i++ ){
+                //Se obtiene el elemento 'source'
+//                Element source = (Element) sourceList.get(i);
 
-            oXml = new XmlSource();
+                //Se obtiene el atributo 'consult', 'id' y 'code' que esta en el tag 'source'
+                oXml.setConsultSource(source.getAttributeValue(Constants.XML_ATT_CONSULT).trim());
+                oXml.setId(Integer.parseInt(source.getAttributeValue(Constants.XML_ATT_ID)));
+                oXml.setCode(source.getAttributeValue(Constants.XML_ATT_CODE.trim()));
 
-            //Se obtiene el elemento 'source'
-            Element source = (Element) sourceList.get(i);
+                //Si se permite 'y' se consulta un recurso
+                if (oXml.getConsultSource().equals(Constants.XML_ATT_CONSULT_YES)) {
+                    //Se obtiene el valor del tag 'name' y 'link'
+                    oXml.setName(source.getChild(Constants.XML_TAG_NAME).getTextTrim());
+                    oXml.setLink(source.getChild(Constants.XML_TAG_LINK).getTextTrim());
 
-            //Se obtiene el atributo 'consult', 'id' y 'code' que esta en el tag 'source'
-            oXml.setConsultSource( source.getAttributeValue( Constants.XML_ATT_CONSULT ).trim() );
-            oXml.setId( Integer.parseInt( source.getAttributeValue( Constants.XML_ATT_ID ) ) );
-            oXml.setCode( source.getAttributeValue( Constants.XML_ATT_CODE.trim() ) );
+                    //<<<<<<<<<<<<<<<<<<<<< TABLE OF CONTENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    Element tableOfContents = source.getChild(Constants.XML_TAG_TABLEOFCONTENTS);
+                    //Se permite 'y' consultar la table of contents
+                    if (tableOfContents.getAttributeValue(Constants.XML_ATT_CONSULT).trim().equals(Constants.Y_YES)) {
+                        processXmlTableOfContents(tableOfContents, xmlMenuItemList, sectionList);
+                    }
+                    oXml.setXmlMenuItemList(xmlMenuItemList);
+                    oXml.setSectionList(sectionList);
+                    //<<<<<<<<<<<<<<<<<<<<< TABLE OF CONTENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-            //Si se permite 'y' se consulta un recurso
-            if( oXml.getConsultSource().equals( Constants.XML_ATT_CONSULT_YES ) ) {
-                //Se obtiene el valor del tag 'name' y 'link'
-                oXml.setName(source.getChild( Constants.XML_TAG_NAME ).getTextTrim());
-                oXml.setLink(source.getChild( Constants.XML_TAG_LINK ).getTextTrim() );
+                    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    Element highlights = source.getChild(Constants.XML_TAG_HIGHLIGTS);
+                    //Se permite 'y' consultar todas las highlights
+                    if (highlights.getAttributeValue(Constants.XML_ATT_CONSULT).trim().equals(Constants.XML_ATT_CONSULT_YES)) {
+                        processXmlHighlight(highlights, highlightList);
+                    }//end if( highlights.getAttributeValue("consult").charAt(0) == 'y') Se permite 'y' consultar las highlights
+                    //Se almacena la lista de highlights al objeto
+                    oXml.setHighlightList(highlightList);
+                    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-                //<<<<<<<<<<<<<<<<<<<<< TABLE OF CONTENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                Element tableOfContents = source.getChild( Constants.XML_TAG_TABLEOFCONTENTS );
-                //Se permite 'y' consultar la table of contents
-                if (tableOfContents.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals(Constants.Y_YES)){
-                    processXmlTableOfContents(tableOfContents, xmlMenuItemList, sectionList);
-                }
-                oXml.setXmlMenuItemList(xmlMenuItemList);
-                oXml.setSectionList(sectionList);
-                //<<<<<<<<<<<<<<<<<<<<< TABLE OF CONTENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    Element links = source.getChild(Constants.XML_TAG_LINKS);
+                    //Se permite 'y' consultar todos las links
+                    if (links.getAttributeValue(Constants.XML_ATT_CONSULT).trim().equals(Constants.XML_ATT_CONSULT_YES)) {
+                        processXmlLink(links, linkList);
+                    }//end if( links.getAttributeValue("consult").charAt(0) == 'y') Se permite 'y' consultar los links
+                    //Se almacena la lista de sections al objeto
+                    oXml.setLinkList(linkList);
+                    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-                //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                Element highlights = source.getChild( Constants.XML_TAG_HIGHLIGTS );
-                //Se permite 'y' consultar todas las highlights
-                if( highlights.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals( Constants.XML_ATT_CONSULT_YES ) ){
-                    processXmlHighlight(highlights, highlightList);
-                }//end if( highlights.getAttributeValue("consult").charAt(0) == 'y') Se permite 'y' consultar las highlights
-                //Se almacena la lista de highlights al objeto
-                oXml.setHighlightList(highlightList);
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-                //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                Element links = source.getChild( Constants.XML_TAG_LINKS );
-                //Se permite 'y' consultar todos las links
-                if( links.getAttributeValue( Constants.XML_ATT_CONSULT ).trim().equals( Constants.XML_ATT_CONSULT_YES ) ){
-                    processXmlLink(links, linkList);
-                }//end if( links.getAttributeValue("consult").charAt(0) == 'y') Se permite 'y' consultar los links
-                //Se almacena la lista de sections al objeto
-                oXml.setLinkList(linkList);
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-            }//end if(getConsultSource() == 'y')
-
-            xmlList.add(oXml);
+                }//end if(getConsultSource() == 'y')
+                sourceConfiguration = oXml;
+//                xmlList.add(oXml);
+            }
+            //</editor-fold>
+        }catch (Exception e){
+            logger.error("Error to build xml source configuration {} (ReadXml.read())", xmlFile, e);
         }
-
-        return xmlList;
+        return sourceConfiguration;
     }
 
 

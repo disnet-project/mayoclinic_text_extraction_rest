@@ -23,4 +23,15 @@ public class List_ extends Text {
     public void setBulletList(List<String> bulletList) {
         this.bulletList = bulletList;
     }
+
+
+    @Override
+    public String toString() {
+        return "List_{" +
+                "id='" + super.getId() + '\'' +
+                ", title='" + super.getTitle() + '\'' +
+                ", textOrder='" + super.getTextOrder() + '\'' +
+                ", bulletList='" + bulletList + '\'' +
+                '}';
+    }
 }

@@ -30,6 +30,11 @@ public class Synonym {
         this.name = name;
     }
 
+    public Synonym(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package edu.upm.midas.model.document_structure.text;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.upm.midas.model.document_structure.Link;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class Text {
     private int id;
     private String title;//EL nombre si tiene, será un <h3>
     private int textOrder;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Link> urlList;
 
 
@@ -57,4 +58,14 @@ public class Text {
         this.urlList = urlList;
     }
 
+
+    @Override
+    public String toString() {
+        return "Text{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", textOrder='" + textOrder + '\'' +
+//                ", urlList=" + urlList +
+                '}';
+    }
 }

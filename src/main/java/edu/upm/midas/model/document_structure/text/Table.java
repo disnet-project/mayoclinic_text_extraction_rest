@@ -23,4 +23,12 @@ public class Table extends Text {
     public void setTrList(List<Tr> trList) {
         this.trList = trList;
     }
+
+
+    @Override
+    public String toString() {
+        return "Table{" +
+                "trList=" + trList +
+                '}';
+    }
 }

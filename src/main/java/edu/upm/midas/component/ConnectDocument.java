@@ -7,6 +7,8 @@ import edu.upm.midas.model.document_structure.Connection_;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,22 +28,24 @@ import java.net.URLEncoder;
 @Component
 public class ConnectDocument {
 
+    private static final Logger logger = LoggerFactory.getLogger(ConnectDocument.class);
+
     @Autowired
     private Common common;
-
     @Value(value = "${my.service.rest.timeout.jsoup}")
     public Integer JSOUP_TIMEOUT;
 
     /**
      * Con esta método compruebo el Status code de la respuesta que recibo al hacer la petición
      * EJM:
-     * 		200 OK			300 Multiple Choices
+     * 		200 OK			        300 Multiple Choices
      * 		301 Moved Permanently	305 Use Proxy
-     * 		400 Bad Request		403 Forbidden
-     * 		404 Not Found		500 Internal Server Error
-     * 		502 Bad Gateway		503 Service Unavailable
+     * 		400 Bad Request		    403 Forbidden
+     * 		404 Not Found		    500 Internal Server Error
+     * 		502 Bad Gateway		    503 Service Unavailable
+     *
      * @paramFromObject getLink()
-     * @return Status Code
+     * @return Devuelve una conexión a un documento HTML (status, url y el documento)
      *//*REGRESAR UN OBJETO CONNECTOBJECTRESPONSE*/
     public Connection_ connect(String link) throws Exception {
         //Response oResponse; ya no se usa

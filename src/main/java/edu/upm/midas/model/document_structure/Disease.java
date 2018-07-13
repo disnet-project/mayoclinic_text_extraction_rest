@@ -86,7 +86,7 @@ public class Disease {
 
     public void setSynonyms(List<Synonym> synonyms) {
         this.synonyms = synonyms;
-        if (synonyms!=null) this.synonymCount = synonyms.size();
+        if (this.synonyms!=null) this.synonymCount = this.synonyms.size();
     }
 
     @Override
