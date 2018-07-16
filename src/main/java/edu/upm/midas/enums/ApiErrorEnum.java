@@ -9,6 +9,7 @@ public enum ApiErrorEnum {
 	UNAUTHORIZED("401", "The access token credential are missing or invalid for the given request"),
 	RESOURCE_NOT_FOUND("404", "Could not find resource"),
 	RESOURCES_NOT_FOUND("404", "Could not find resources"),
+	INVALID_SNAPSHOT("405", "The snapshot is incorrect"),
 	INTERNAL_SERVER_ERROR("500", "An unknown Api exception was thrown");
 
 	private String key;

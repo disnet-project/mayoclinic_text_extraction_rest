@@ -48,20 +48,27 @@ public class ExtractService {
         String end;
         String snapshot = timeProvider.getNowFormatyyyyMMdd();
 
-        try {
-            sourceList = mayoClinicExtraction.extract(request.getSnapshot());
-            if (sourceList!=null) {
-                response.setSources(sourceList);
-                response.setResponseCode(StatusHttpEnum.OK.getClave());
-                response.setResponseMessage(StatusHttpEnum.OK.getDescripcion());
-            }else{
-                response.setResponseCode(ApiErrorEnum.RESOURCES_NOT_FOUND.getKey());
-                response.setResponseMessage(ApiErrorEnum.RESOURCES_NOT_FOUND.getDescription());
+        if (snapshot.equals(request.getSnapshot())) {
+
+            try {
+                sourceList = mayoClinicExtraction.extract(request.getSnapshot());
+                if (sourceList != null) {
+                    response.setSources(sourceList);
+                    response.setResponseCode(StatusHttpEnum.OK.getClave());
+                    response.setResponseMessage(StatusHttpEnum.OK.getDescripcion());
+                } else {
+                    response.setResponseCode(ApiErrorEnum.RESOURCES_NOT_FOUND.getKey());
+                    response.setResponseMessage(ApiErrorEnum.RESOURCES_NOT_FOUND.getDescription());
+                }
+            } catch (Exception e) {
+                response.setSources(new ArrayList<>());
+                response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
+                response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
             }
-        }catch (Exception e){
-            response.setSources(new ArrayList<>());
-            response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
-            response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
+        }else{
+            response.setSources(sourceList);
+            response.setResponseCode(ApiErrorEnum.INVALID_SNAPSHOT.getKey());
+            response.setResponseMessage(ApiErrorEnum.INVALID_SNAPSHOT.getDescription());
         }
         response.setSources(sourceList);
         response.setStart_time(start);
