@@ -4,13 +4,14 @@ import edu.upm.midas.model.Request;
 import edu.upm.midas.model.Response;
 import edu.upm.midas.service.ExtractService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.mobile.device.Device;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by gerardo on 03/07/2018.
@@ -31,8 +32,31 @@ public class ExtractionController {
 
     @RequestMapping(path =  {  "${my.service.rest.request.mapping.texts.path}" },
             method = RequestMethod.POST)
-    public Response extract(@RequestBody @Valid Request request, HttpServletRequest httpRequest) throws Exception {
+    public Response extract(@RequestBody @Valid Request request, HttpServletRequest httpRequest/*, Device device*/) throws Exception {
         return extractService.extract(request);
+    }
+
+
+    @RequestMapping(path =  {  "${my.service.rest.request.mapping.texts.json.path}" },
+            method = RequestMethod.GET,
+            params = {"snapshot", "action"})
+    public Response extractJSON(@RequestParam(value = "snapshot") @Valid @NotBlank @NotEmpty @NotNull String snapshot,
+                                @RequestParam(value = "action") @Valid @NotBlank @NotEmpty @NotNull  String action,
+                                HttpServletRequest httpRequest/*, Device device*/) throws Exception {
+        Request request = new Request(snapshot, false, action);
+        return extractService.extractJSON(request);
+    }
+
+
+    @RequestMapping(path =  {  "${my.service.rest.request.mapping.report.path}" },
+            method = RequestMethod.GET,
+            params = {"snapshot", "action"})
+    public void extractionReport(
+            @RequestParam(value = "snapshot") @Valid @NotBlank @NotEmpty @NotNull String snapshot,
+            @RequestParam(value = "action") @Valid @NotBlank @NotEmpty @NotNull  String action,
+            HttpServletRequest httpRequest/*, Device device*/) throws Exception {
+        Request request = new Request(snapshot, false, action);
+//        extractService.extractionReport(request);
     }
 
 

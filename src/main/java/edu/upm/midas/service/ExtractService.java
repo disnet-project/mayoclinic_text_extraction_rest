@@ -40,20 +40,25 @@ public class ExtractService {
     private MayoClinicExtraction mayoClinicExtraction;
 
 
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
     public Response extract(Request request) throws Exception {
         Response response = new Response();
-        List<Source> sourceList = null;
+        List<Source> sourceList = new ArrayList<>();
 
         String start = timeProvider.getTimestampFormat();
         String end;
         String snapshot = timeProvider.getNowFormatyyyyMMdd();
 
+        response.setSources(sourceList);
         if (snapshot.equals(request.getSnapshot())) {
 
             try {
                 sourceList = mayoClinicExtraction.extract(request.getSnapshot());
-                if (sourceList != null) {
-                    response.setSources(sourceList);
+                if (sourceList.size()>0) {
                     response.setResponseCode(StatusHttpEnum.OK.getClave());
                     response.setResponseMessage(StatusHttpEnum.OK.getDescripcion());
                 } else {
@@ -61,21 +66,18 @@ public class ExtractService {
                     response.setResponseMessage(ApiErrorEnum.RESOURCES_NOT_FOUND.getDescription());
                 }
             } catch (Exception e) {
-                response.setSources(new ArrayList<>());
                 response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
                 response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
             }
         }else{
-            response.setSources(sourceList);
             response.setResponseCode(ApiErrorEnum.INVALID_SNAPSHOT.getKey());
             response.setResponseMessage(ApiErrorEnum.INVALID_SNAPSHOT.getDescription());
         }
-        response.setSources(sourceList);
         response.setStart_time(start);
         end = timeProvider.getTimestampFormat();
         response.setEnd_time(end);
         //<editor-fold desc="ESCRIBIR JSON CON LA RESPUESTA">
-        if (request.isJson()) {
+        if (request.isJson() && sourceList.size()>0) {
             try {
                 logger.info("Saving initiated MayoClinic texts in a JSON");
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -92,6 +94,38 @@ public class ExtractService {
 
         return response;
 
+    }
+
+
+    /**
+     * @param request
+     * @return
+     * @throws Exception
+     */
+    public Response extractJSON(Request request) throws Exception {
+        Response response = new Response();
+        String start = timeProvider.getTimestampFormat();
+        String end;
+        try {
+            //Extrae el archivo de textos
+            if (request.getExtractionType().equals(Constants.TEXTS)) {//System.out.println("entra texts: " + request.getSnapshot());
+                response = common.readJSONFile(request.getSnapshot(), Constants.RETRIEVAL_FILE_NAME);
+            }else{
+                //Extrae resources
+                response = common.readJSONFile(request.getSnapshot(), Constants.RETRIEVAL_RESOURCES_FILE_NAME);
+            }
+        }catch (Exception e){
+            response.setSources(new ArrayList<>());
+            response.setResponseCode(ApiErrorEnum.INTERNAL_SERVER_ERROR.getKey());
+            response.setResponseMessage(ApiErrorEnum.INTERNAL_SERVER_ERROR.getDescription());
+        }
+        response.setStart_time(start);
+        end = timeProvider.getTimestampFormat();
+        response.setEnd_time(end);
+
+        System.out.println("Inicio:" + start + " | Termino: " + end);
+
+        return response;
     }
 
 

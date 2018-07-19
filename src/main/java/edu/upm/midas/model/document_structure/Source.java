@@ -102,4 +102,17 @@ public class Source {
         this.sectionMap = sectionMap;
     }
 
+
+    @Override
+    public String toString() {
+        return "Source{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", url=" + url +
+                ", documentCount=" + documentCount +
+                ", documents=" + documents +
+                ", sectionMap=" + sectionMap +
+                '}';
+    }
 }

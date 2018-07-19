@@ -66,4 +66,18 @@ public class Response {
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
     }
+
+
+    @Override
+    public String toString() {
+        return "Response{\n" +
+                "responseCode='" + responseCode + '\'' + "\n" +
+                ", responseMessage='" + responseMessage + '\'' + "\n" +
+                ", sourceCount=" + sources.size() + "\n" +
+                ", sources=" + sources + "\n" +
+                ", resourceHashMap=" + resourceHashMap + "\n" +
+                ", start_time='" + start_time + '\'' + "\n" +
+                ", end_time='" + end_time + '\'' + "\n" +
+                '}';
+    }
 }

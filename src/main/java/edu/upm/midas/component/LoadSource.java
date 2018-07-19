@@ -33,8 +33,6 @@ public class LoadSource {
     private static final Logger logger = LoggerFactory.getLogger(LoadSource.class);
 
     @Autowired
-    private Environment env;
-    @Autowired
     private ReadXml oReadXml;
 
     /**

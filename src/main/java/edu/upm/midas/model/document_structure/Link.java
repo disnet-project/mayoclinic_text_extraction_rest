@@ -89,11 +89,11 @@ public class Link {
     }
 
 
-    @Override
-    public String toString() {
-        return "Link{" +
-                "id=" + id +
-                ", url='" + url + '\'' +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Link{" +
+//                "id=" + id +
+//                ", url='" + url + '\'' +
+//                '}';
+//    }
 }

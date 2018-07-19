@@ -61,13 +61,13 @@ public class ConnectDocument {
             connection_.setStatus( connection.execute().statusMessage() );
             connection_.setStatusCode( connection.execute().statusCode()+"" );
         } catch (Exception e) {
-            System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
             connection_ = tryConnect(connection_);
             if (connection_.getDocument() == null) {
                 connection_.setStatus(StatusHttpEnum.NOT_FOUND.getDescripcion());
                 connection_.setStatusCode(StatusHttpEnum.NOT_FOUND.getClave());
                 connection_.setDocument(null);
             }
+            logger.error("Exception to connect with the page: ({}) ", connection_.getLink(), e);
         }
 
         return connection_;
@@ -86,32 +86,12 @@ public class ConnectDocument {
             connection_.setStatus( connection.execute().statusMessage() );
             connection_.setStatusCode( connection.execute().statusCode()+"" );
         } catch (Exception e) {
-            System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
             connection_.setStatus( StatusHttpEnum.NOT_FOUND.getDescripcion() );
             connection_.setStatusCode( StatusHttpEnum.NOT_FOUND.getClave() );
             connection_.setDocument(null);
+            logger.error("Exception to connect with the page: ({}) ", connection_.getLink(), e);
         }
         return connection_;
-    }
-
-    /**
-     * Este método devuelve un objeto de la clase Doc con el contenido del
-     * HTML de la página web y así manipularlo con los métodos de la biblioteca JSoup
-     * @paramFromObject getLink()
-     * @return Documento HTML
-     */
-    public Document getHtmlDocument(Connection connection) throws Exception {
-        Document oDoc = null;
-
-        try {
-            oDoc = connection.get();
-        } catch (IOException ex) {
-/*
-            System.out.println("Exception to obtain HTML document (" + oConnect.getLink() + ")" + ex.getMessage());
-*/
-        }
-
-        return oDoc;
     }
 
 }

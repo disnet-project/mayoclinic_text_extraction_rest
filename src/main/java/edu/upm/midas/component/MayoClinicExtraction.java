@@ -126,15 +126,13 @@ public class MayoClinicExtraction {
         //<editor-fold desc="VARIABLES DE INICO">
         Source source;
         Link url;
-        List<Source> sourceList;
+        List<Source> sourceList = new ArrayList<>();
         //String snapshot = date.getNowFormatyyyyMMdd();
         //</editor-fold>
         System.out.println("Preparing model...");
         System.out.println("Reading data source configuration...");
         ini();
         // --------- Inicio del proceso de extracción
-        // Se inicializa la lista de "Source"
-        sourceList = new ArrayList<>();
         // Se leen y recorren los "Sources": mayoclinic, wikipedia, medline, etc. NOTA. Aquí solo se leen páginas de mayoclinic.
         //<editor-fold desc="LEER ARCHIVO DE CONFIGURACION">
 //        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();

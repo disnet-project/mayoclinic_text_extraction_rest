@@ -2,7 +2,10 @@ package edu.upm.midas.common.util;
 
 import com.google.gson.Gson;
 import edu.upm.midas.constants.Constants;
+import edu.upm.midas.model.Response;
 import org.apache.commons.text.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -25,6 +28,8 @@ import java.util.regex.Pattern;
  */
 @Service
 public class Common {
+
+    private static final Logger logger = LoggerFactory.getLogger(Common.class);
 
     public boolean isEmpty(String string) {
         if (string == null) {
@@ -116,6 +121,29 @@ public class Common {
             bW.write(jsonBody);
             bW.close();
         }
+    }
+
+
+    /**
+     * @param version
+     * @return
+     * @throws Exception
+     */
+    public Response readJSONFile(String version, String file_name) throws Exception {
+        Response response = null;
+        System.out.println("Read JSON!... ");
+        Gson gson = new Gson();
+        String fileName = version + file_name + Constants.DOT_JSON;
+        String path = Constants.RETRIEVAL_HISTORY_FOLDER + fileName;
+        System.out.println(path);
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(path));
+            response = gson.fromJson(br, Response.class);
+        }catch (Exception e){
+            logger.error("Error to read or convert JSON {}", path, e);
+//            System.out.println("Error to read or convert JSON!..." + e.getLocalizedMessage() + e.getMessage() + e.getCause());
+        }
+        return response;
     }
 
 }

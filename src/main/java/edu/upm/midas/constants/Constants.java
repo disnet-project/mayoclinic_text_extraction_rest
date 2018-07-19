@@ -40,35 +40,8 @@ public class Constants {
     public static final String DOT_JSON = ".json";
     public static final String DOT_XML = ".xml";
 
-    public static final String IMAGE_PATTERN =
-            "([^\\s]+(\\.(?i)(jpg|png|gif|bmp))$)";
-
-    /** Validaciones */
-//    public static final String SEMANTIC_TYPES[] = { "sosy", "diap", "dsyn", "fndg", "lbpr", "lbtr" };
-    public static final List<String> SEMANTIC_TYPES_LIST = new ArrayList<String>(){{
-        add("sosy");
-        add("diap");
-        add("dsyn");
-        add("fndg");
-        add("lbpr");
-        add("lbtr");
-
-        add("inpr");//todas las siguientes para encontrar enfermedades mentales
-        add("menp");
-        add("mobd");
-        add("patf");
-
-//        add("fngs"); encuentra familias de hongos, eliminar
-        add("cgab");//para encontrar Coma
-
-        add("cgab");
-        add("clna");
-
-        add("qlco");
-        add("hcpp");
-
-    }};
-
+    public static final String TEXTS = "texts";
+    public static final String RESOURCES = "resources";
 
     /**
      * Fuentes de extracción

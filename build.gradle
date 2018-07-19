@@ -32,17 +32,6 @@ dependencies {
         exclude module: "logback-classic"
     }
 
-    compile("org.springframework.boot:spring-boot-starter-mobile") {
-        exclude module: "spring-boot-starter-logging"
-        exclude module: "logback-classic"
-    }
-
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mobile
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-mobile', version: '2.0.0.M2'
-
-
-
-
     testCompile('org.springframework.boot:spring-boot-starter-test'){
         exclude module: "spring-boot-starter-logging"
         exclude module: "logback-classic"
@@ -74,3 +63,5 @@ dependencies {
 test {
     enabled = false
 }
+
+

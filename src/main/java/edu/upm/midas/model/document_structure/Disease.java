@@ -103,15 +103,15 @@ public class Disease {
     }
 
 
-    @Override
-    public String toString() {
-        return "Disease{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-//                ", definition='" + definition + '\'' +
-//                ", cui='" + cui + '\'' +
-//                ", synonymCount=" + synonymCount +
-//                ", synonyms=" + synonyms +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "Disease{" +
+//                "id=" + id +
+//                ", name='" + name + '\'' +
+////                ", definition='" + definition + '\'' +
+////                ", cui='" + cui + '\'' +
+////                ", synonymCount=" + synonymCount +
+////                ", synonyms=" + synonyms +
+//                '}';
+//    }
 }
