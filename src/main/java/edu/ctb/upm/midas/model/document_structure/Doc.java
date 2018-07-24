@@ -140,19 +140,19 @@ public class Doc {
     }
 
 
-//    @Override
-//    public String toString() {
-//        return "Doc{" +
-//                "id=" + id +
-//                ", date='" + date + '\'' +
-//                ", url=" + url +
-//                ", hasConnected=" + hasConnected +
-//                ", diseaseArticle=" + diseaseArticle +
-//                ", disease=" + disease +
-//                ", sectionCount=" + sectionCount +
-//                ", sectionList=" + sectionList +
-////                ", codeCount=" + codeCount +
-////                ", codeList=" + codeList +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Doc{" +
+                "id=" + id +
+                ", date='" + date + '\'' +
+                ", url=" + url +
+                ", hasConnected=" + hasConnected +
+                ", diseaseArticle=" + diseaseArticle +
+                ", disease=" + disease +
+                ", sectionCount=" + sectionCount +
+                ", sectionList=" + sectionList +
+//                ", codeCount=" + codeCount +
+//                ", codeList=" + codeList +
+                '}';
+    }
 }

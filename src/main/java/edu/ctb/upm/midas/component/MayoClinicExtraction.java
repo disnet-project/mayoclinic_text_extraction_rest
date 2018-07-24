@@ -703,6 +703,11 @@ public class MayoClinicExtraction {
         }else{
             disnetDocument.getSectionList().add(section);
         }
+
+//        System.out.println(disnetDocument.getDisease().getName());
+//        if (disnetDocument.getDisease().getName().equalsIgnoreCase("Adjustment disorders")){
+//            System.out.println(disnetDocument);
+//        }
     }
 
 

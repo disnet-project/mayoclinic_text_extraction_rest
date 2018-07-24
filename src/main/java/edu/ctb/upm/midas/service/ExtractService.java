@@ -54,7 +54,6 @@ public class ExtractService {
         String end;
         String snapshot = timeProvider.getNowFormatyyyyMMdd();
 
-        response.setSources(sourceList);
         if (snapshot.equals(request.getSnapshot())) {
 
             try {
@@ -74,6 +73,7 @@ public class ExtractService {
             response.setResponseCode(ApiErrorEnum.INVALID_SNAPSHOT.getKey());
             response.setResponseMessage(ApiErrorEnum.INVALID_SNAPSHOT.getDescription());
         }
+        response.setSources(sourceList);
         response.setStart_time(start);
         end = timeProvider.getTimestampFormat();
         response.setEnd_time(end);
