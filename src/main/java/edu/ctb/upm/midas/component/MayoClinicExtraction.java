@@ -587,7 +587,7 @@ public class MayoClinicExtraction {
                         Section section = getSection(sectionName, sectionList);
                         //Crea la lista de textos que se agregará a la sección
                         List<Text> textList = new ArrayList<>();
-//                        System.out.println("Relevant section: " + section.getName());
+                        System.out.println("Relevant section: " + section.getName());
 //                        System.out.println("Section: " + section);
                         //Obtenemos el hermano de la etiqueta "h2" (de la sección)
                         // y recorremos para buscar parrafos <p> o listas <lu>
@@ -606,13 +606,16 @@ public class MayoClinicExtraction {
                         //</editor-fold>
                         //Si se encontró al menos un texto se relaciona la sección con el documento y los textos
                         //con la sección
-                        if (countText>0) {
+                        if (textList.size()>0) {
+//                            System.out.println("HAVE TEXTS IN THEIR SECTIONS");
                             //Agrega la lista de textos a la sección
                             section.setTextList(textList);
                             //Crea una lista de secciones y la agrega al documento DISNET y si ya existe solo agrega
                             //la nueva sección
                             initializeSectionListIfNotExist(disnetDocument, section);
 //                            disnetDocument.getSectionList().add(section);
+                        }else {
+//                            System.out.println("NOT TEXTS IN THEIR SECTIONS");
                         }
                     }
                 }
@@ -695,9 +698,8 @@ public class MayoClinicExtraction {
      *              Recibe una sección
      */
     public void initializeSectionListIfNotExist(Doc disnetDocument, Section section){
-        List<Section> sections = null;
         if(disnetDocument.getSectionList()==null){
-            sections = new ArrayList<>();
+            List<Section> sections = new ArrayList<>();
             sections.add(section);
             disnetDocument.setSectionList(sections);
         }else{
