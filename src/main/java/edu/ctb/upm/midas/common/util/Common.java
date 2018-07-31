@@ -1,14 +1,21 @@
 package edu.ctb.upm.midas.common.util;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.Response;
+import edu.ctb.upm.midas.model.document_structure.text.List_;
+import edu.ctb.upm.midas.model.document_structure.text.Paragraph;
+import edu.ctb.upm.midas.model.document_structure.text.Table;
+import edu.ctb.upm.midas.model.document_structure.text.Text;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -123,7 +130,7 @@ public class Common {
         }
     }
 
-
+    //Actualizar para que maneje errores y los retorne
     /**
      * @param version
      * @return
@@ -139,11 +146,30 @@ public class Common {
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
             response = gson.fromJson(br, Response.class);
+            gson = new GsonBuilder().setPrettyPrinting().create();
+//            System.out.println(gson.toJson(response));
         }catch (Exception e){
             logger.error("Error to read or convert JSON {}", path, e);
 //            System.out.println("Error to read or convert JSON!..." + e.getLocalizedMessage() + e.getMessage() + e.getCause());
         }
         return response;
     }
+
+
+
+//    RuntimeTypeAdapterFactory<Text> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+//            .of(Text.class, "type")
+//            .registerSubtype(Paragraph.class, "paragraph")
+//            .registerSubtype(List_.class, "list")
+//            .registerSubtype(Table.class, "table");
+//    gson = new GsonBuilder().registerTypeAdapterFactory(runtimeTypeAdapterFactory).create();
+//    Type listType = new TypeToken<Response>()
+//    {
+//        Text text = new Text();
+//        Paragraph paragraph = new Paragraph();
+//        List_ list_ = new List_();
+//        Table table = new Table();
+//    }.getType();
+//    response = gson.fromJson(br, listType);
 
 }

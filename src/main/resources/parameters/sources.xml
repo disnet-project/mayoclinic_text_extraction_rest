@@ -6,8 +6,8 @@
         <tablecontents consult="y" type="div" class="tableofcontents">
             <item consult="y" id="" role="menuitem" type="li" name="Symptoms &amp; causes" >
                 <sections consult="y" type="div" class="content">
-                    <section consult="y" id="1" role="" type="h2" name="Symptoms" />
-                    <section consult="y" id="2" role="" type="h2" name="Causes" />
+                    <section consult="y" id="Symptoms" role="" type="h2" name="Symptoms" />
+                    <section consult="y" id="Causes" role="" type="h2" name="Causes" />
                 </sections>
             </item>
             <item consult="y" id="" role="menuitem" type="li" name="Diagnosis &amp; treatment" >

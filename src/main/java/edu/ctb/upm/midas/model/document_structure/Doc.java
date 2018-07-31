@@ -111,7 +111,7 @@ public class Doc {
 
     public void updateCounts() {
         if (this.sectionList!=null) this.sectionCount = this.sectionList.size(); else this.sectionCount = 0;
-        if (this.codeList!=null) this.codeCount = this.codeList.size(); else this.codeCount = 0;
+//        if (this.codeList!=null) this.codeCount = this.codeList.size(); else this.codeCount = 0;
     }
 
     public List<Section> getSectionList() {

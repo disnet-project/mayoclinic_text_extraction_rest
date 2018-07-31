@@ -587,7 +587,7 @@ public class MayoClinicExtraction {
                         Section section = getSection(sectionName, sectionList);
                         //Crea la lista de textos que se agregará a la sección
                         List<Text> textList = new ArrayList<>();
-                        System.out.println("Relevant section: " + section.getName());
+//                        System.out.println("Relevant section: " + section.getName());
 //                        System.out.println("Section: " + section);
                         //Obtenemos el hermano de la etiqueta "h2" (de la sección)
                         // y recorremos para buscar parrafos <p> o listas <lu>
@@ -611,7 +611,7 @@ public class MayoClinicExtraction {
                             //Agrega la lista de textos a la sección
                             section.setTextList(textList);
                             //Crea una lista de secciones y la agrega al documento DISNET y si ya existe solo agrega
-                            //la nueva sección
+                            //la sección nueva
                             initializeSectionListIfNotExist(disnetDocument, section);
 //                            disnetDocument.getSectionList().add(section);
                         }else {
@@ -705,6 +705,13 @@ public class MayoClinicExtraction {
         }else{
             disnetDocument.getSectionList().add(section);
         }
+
+//        Para analizar si se están agregando secciones
+//        if (disnetDocument.getSectionList().size()>0){
+//            System.out.println("Sections OK");
+//        }else{
+//            System.out.println("Sections fail");
+//        }
 
 //        System.out.println(disnetDocument.getDisease().getName());
 //        if (disnetDocument.getDisease().getName().equalsIgnoreCase("Adjustment disorders")){

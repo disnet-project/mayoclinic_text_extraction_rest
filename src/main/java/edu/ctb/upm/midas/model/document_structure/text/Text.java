@@ -24,6 +24,10 @@ public class Text {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Link> urlList;
 
+    //chapuza en lo que encuentro una mejor solución
+    private String text;
+    private List<String> bulletList;
+
 
 
     public int getId() {
@@ -58,6 +62,21 @@ public class Text {
         this.urlList = urlList;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public List<String> getBulletList() {
+        return bulletList;
+    }
+
+    public void setBulletList(List<String> bulletList) {
+        this.bulletList = bulletList;
+    }
 
     @Override
     public String toString() {
