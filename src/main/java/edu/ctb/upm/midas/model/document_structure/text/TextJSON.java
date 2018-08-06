@@ -1,22 +1,11 @@
 package edu.ctb.upm.midas.model.document_structure.text;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.ctb.upm.midas.model.document_structure.Link;
 
 import java.util.List;
 
-/**
- * Created by gerardo on 3/4/17.
- *
- * @author Gerardo Lagunes G. ${EMAIL}
- * @version ${<VERSION>}
- * @project ExtractionInformationMayoClinic
- * @className Text
- * @see
- */
-//Un Text siempre será un <p>, <ul><ol>
-public class Text {
+public class TextJSON {
 
     private int id;
     private String title;//EL nombre si tiene, será un <h3>
@@ -25,8 +14,8 @@ public class Text {
     private List<Link> urlList;
 
     //chapuza en lo que encuentro una mejor solución
-//    private String text;
-//    private List<String> bulletList;
+    private String text;
+    private List<String> bulletList;
 
 
 
@@ -62,21 +51,21 @@ public class Text {
         this.urlList = urlList;
     }
 
-//    public String getText() {
-//        return text;
-//    }
-//
-//    public void setText(String text) {
-//        this.text = text;
-//    }
-//
-//    public List<String> getBulletList() {
-//        return bulletList;
-//    }
-//
-//    public void setBulletList(List<String> bulletList) {
-//        this.bulletList = bulletList;
-//    }
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public List<String> getBulletList() {
+        return bulletList;
+    }
+
+    public void setBulletList(List<String> bulletList) {
+        this.bulletList = bulletList;
+    }
 
     @Override
     public String toString() {
@@ -87,4 +76,5 @@ public class Text {
 //                ", urlList=" + urlList +
                 '}';
     }
+
 }

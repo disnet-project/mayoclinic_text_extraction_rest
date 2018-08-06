@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.model.Response;
+import edu.ctb.upm.midas.model.ResponseJSON;
 import edu.ctb.upm.midas.model.document_structure.text.List_;
 import edu.ctb.upm.midas.model.document_structure.text.Paragraph;
 import edu.ctb.upm.midas.model.document_structure.text.Table;
@@ -136,8 +137,8 @@ public class Common {
      * @return
      * @throws Exception
      */
-    public Response readJSONFile(String version, String file_name) throws Exception {
-        Response response = null;
+    public ResponseJSON readJSONFile(String version, String file_name) throws Exception {
+        ResponseJSON response = null;
         System.out.println("Read JSON!... ");
         Gson gson = new Gson();
         String fileName = version + file_name + Constants.DOT_JSON;
@@ -145,8 +146,8 @@ public class Common {
         System.out.println(path);
         try {
             BufferedReader br = new BufferedReader(new FileReader(path));
-            response = gson.fromJson(br, Response.class);
-            gson = new GsonBuilder().setPrettyPrinting().create();
+            response = gson.fromJson(br, ResponseJSON.class);
+//            gson = new GsonBuilder().setPrettyPrinting().create();
 //            System.out.println(gson.toJson(response));
         }catch (Exception e){
             logger.error("Error to read or convert JSON {}", path, e);

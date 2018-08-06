@@ -3,6 +3,7 @@ package edu.ctb.upm.midas.controller;
 import edu.ctb.upm.midas.model.Request;
 import edu.ctb.upm.midas.model.RequestJSON;
 import edu.ctb.upm.midas.model.Response;
+import edu.ctb.upm.midas.model.ResponseJSON;
 import edu.ctb.upm.midas.service.ExtractService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.mobile.device.Device;
@@ -41,7 +42,7 @@ public class ExtractionController {
     @RequestMapping(path =  {  "${my.service.rest.request.mapping.texts.json.path}" },
             method = RequestMethod.POST/*,
             params = {"snapshot", "action"}*/)
-    public Response extractJSON(/*@RequestParam(value = "snapshot") @Valid @NotBlank @NotEmpty @NotNull String snapshot,
+    public ResponseJSON extractJSON(/*@RequestParam(value = "snapshot") @Valid @NotBlank @NotEmpty @NotNull String snapshot,
                                 @RequestParam(value = "action") @Valid @NotBlank @NotEmpty @NotNull  String action,*/
                                 @RequestBody @Valid RequestJSON request,
                                 HttpServletRequest httpRequest/*, Device device*/) throws Exception {

@@ -24,6 +24,7 @@
             <tag consult="y" id="" class="" role="menubar" type="ul" desc="horizontal_menu_bar" />
             <tag consult="y" id="" class="" role="" type="article" desc="body_article" />
             <tag consult="y" id="" class="content" role="" type="div" desc="content" />
+            <tag consult="y" id="" class="pubdate" role="" type="div" desc="section_update" />
         </highlights>
         <links consult="y">
             <link consult="y" id="1" alternative="https://www.mayoclinic.org" >https://www.mayoclinic.org/diseases-conditions</link>

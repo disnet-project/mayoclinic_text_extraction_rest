@@ -540,8 +540,22 @@ public class MayoClinicExtraction {
         Element articleContent = document.select(articleTag).select(Constants.HTML_DIV + Constants.DOT + contentClass).first();
         //<editor-fold desc="PROCESO DE EXTRACCIÓN DE TEXTOS">
         extractTexts(disnetDocument, sectionList, articleContent);
+        compareSectionUpdates(disnetDocument);
         //</editor-fold>
         //Obtener todos los textos de las secciones relevantes
+    }
+
+
+    public void compareSectionUpdates(Doc disnetDocument){
+        String date_1 = "", date_2 = "";
+        if (disnetDocument.getSectionList()!=null){
+            int count = 1;
+            for (Section section: disnetDocument.getSectionList()) {
+                if (count==1) date_1 = section.getUpdate();
+                if (!date_1.equalsIgnoreCase(section.getUpdate())) System.out.println("DIFERENTES");
+                count++;
+            }
+        }
     }
 
 
@@ -585,6 +599,8 @@ public class MayoClinicExtraction {
                     if (isRelevantSection(sectionName, sectionList)) {
                         //Obtiene el objeto de la sección que se esta procesando para agregarla al documento
                         Section section = getSection(sectionName, sectionList);
+                        //Obtiene la fecha de la última actualización de la sección
+                        section.setUpdate(getSectionUpdate(articleElement));
                         //Crea la lista de textos que se agregará a la sección
                         List<Text> textList = new ArrayList<>();
 //                        System.out.println("Relevant section: " + section.getName());
@@ -625,6 +641,16 @@ public class MayoClinicExtraction {
             }
         }
         //</editor-fold>
+    }
+
+
+    public String getSectionUpdate(Element articleElement){
+        String updateClass = getHighlightXmlByDescription(Constants.XML_HL_SECTION_UPDATE_CLASS, sourceConf).getClass_();
+//                System.out.println("A consultar: "+mainContentElementId);
+        //Obtiene el div que contiene la lista de lista de enfermedades en orden alfabético
+        String update = articleElement.getElementsByClass(updateClass).get(0).ownText();
+//        System.out.println("Section date: " + update);
+        return update;
     }
 
 
@@ -1071,7 +1097,7 @@ public class MayoClinicExtraction {
     public List<Section> getSections(List<XmlSection> xmlSections){
         List<Section> sectionList = new ArrayList<>();
         for (XmlSection xmlSection: xmlSections) {
-            Section section = new Section(Integer.parseInt(xmlSection.getId()), xmlSection.getName());
+            Section section = new Section(xmlSection.getId(), xmlSection.getName());
             sectionList.add(section);
         }
         return sectionList;

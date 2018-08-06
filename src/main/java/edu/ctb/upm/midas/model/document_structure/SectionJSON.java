@@ -1,40 +1,28 @@
 package edu.ctb.upm.midas.model.document_structure;
 
-
-import edu.ctb.upm.midas.model.document_structure.text.Text;
-import edu.ctb.upm.midas.model.document_structure.text.Text;
+import edu.ctb.upm.midas.model.document_structure.text.TextJSON;
 
 import java.util.List;
 
-/**
- * Created by gerardo on 3/4/17.
- *
- * @author Gerardo Lagunes G. ${EMAIL}
- * @version ${<VERSION>}
- * @project ExtractionInformationMayoClinic
- * @className XmlSection
- * @see
- */
-//Una sección siempre será <h2>
-public class Section {
+public class SectionJSON {
 
     private Integer id;
     private String name;
     private String description;
 
     private Integer textCount;
-    private List<Text> textList;
+    private List<TextJSON> textList;
     private String update;
 
-    public Section() {
+    public SectionJSON() {
     }
 
-    public Section(Integer id, String name) {
+    public SectionJSON(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Section(String name, String description) {
+    public SectionJSON(String name, String description) {
         this.name = name;
         this.description = description;
     }
@@ -71,11 +59,11 @@ public class Section {
         this.textCount = textCount;
     }
 
-    public List<Text> getTextList() {
+    public List<TextJSON> getTextList() {
         return textList;
     }
 
-    public void setTextList(List<Text> textList) {
+    public void setTextList(List<TextJSON> textList) {
         this.textList = textList;
         if (this.textList!=null) this.textCount = this.textList.size();
 

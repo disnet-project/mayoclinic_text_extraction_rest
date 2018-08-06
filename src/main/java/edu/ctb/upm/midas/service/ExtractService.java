@@ -10,6 +10,7 @@ import edu.ctb.upm.midas.enums.StatusHttpEnum;
 import edu.ctb.upm.midas.model.Request;
 import edu.ctb.upm.midas.model.RequestJSON;
 import edu.ctb.upm.midas.model.Response;
+import edu.ctb.upm.midas.model.ResponseJSON;
 import edu.ctb.upm.midas.model.document_structure.Source;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,7 +86,7 @@ public class ExtractService {
                 common.writeJSONFile(gson.toJson(response), snapshot /*timeProvider.dateFormatyyyMMdd(snapshot)*/, Constants.RETRIEVAL_FILE_NAME);
                 logger.info("Saving of finished MayoClinic texts in a JSON");
             } catch (Exception e) {
-                logger.error("Error while save json {} ", snapshot /*timeProvider.dateFormatyyyMMdd(snapshot)*/ + Constants.RETRIEVAL_FILE_NAME + Constants.DOT_JSON);
+                logger.error("Error while save json {} ", snapshot /*timeProvider.dateFormatyyyMMdd(snapshot)*/ + Constants.RETRIEVAL_FILE_NAME + Constants.DOT_JSON, e);
             }
         }
         //</editor-fold>
@@ -103,8 +104,8 @@ public class ExtractService {
      * @return
      * @throws Exception
      */
-    public Response extractJSON(RequestJSON request) throws Exception {
-        Response response = new Response();
+    public ResponseJSON extractJSON(RequestJSON request) throws Exception {
+        ResponseJSON response = new ResponseJSON();
         String start = timeProvider.getTimestampFormat();
         String end;
         try {

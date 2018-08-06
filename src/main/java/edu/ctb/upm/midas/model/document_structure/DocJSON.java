@@ -16,7 +16,7 @@ import java.util.List;
  * @className Doc
  * @see
  */
-public class Doc {
+public class DocJSON {
 
     private int id;
     private String date;
@@ -27,17 +27,17 @@ public class Doc {
 
     private Disease disease;
     private Integer sectionCount;
-    private List<Section> sectionList;
+    private List<SectionJSON> sectionList;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer codeCount;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Code> codeList;
 
 
-    public Doc() {
+    public DocJSON() {
     }
 
-    public Doc(int id, String date, Link url, boolean hasConnected, boolean diseaseArticle) {
+    public DocJSON(int id, String date, Link url, boolean hasConnected, boolean diseaseArticle) {
         this.id = id;
         this.date = date;
         this.url = url;
@@ -114,11 +114,11 @@ public class Doc {
 //        if (this.codeList!=null) this.codeCount = this.codeList.size(); else this.codeCount = 0;
     }
 
-    public List<Section> getSectionList() {
+    public List<SectionJSON> getSectionList() {
         return sectionList;
     }
 
-    public void setSectionList(List<Section> sectionList) {
+    public void setSectionList(List<SectionJSON> sectionList) {
         this.sectionList = sectionList;
         if (this.sectionList!=null) this.sectionCount = this.sectionList.size();
     }
