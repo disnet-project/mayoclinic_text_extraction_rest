@@ -1120,7 +1120,8 @@ public class MayoClinicExtraction {
         Section section = null;
         for (Section sec: sectionList) {
             if (sec.getName().equalsIgnoreCase(name)){
-                section = sec;
+                section = new Section(sec.getName(), sec.getDescription());
+//                section = sec;
                 break;
             }
         }
