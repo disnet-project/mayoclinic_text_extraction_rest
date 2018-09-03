@@ -77,7 +77,7 @@ public class ConnectDocument {
 
     public Connection_ tryConnect(Connection_ connection_) throws UnsupportedEncodingException {
         String convertLink = Constants.HTTPS_HEADER + "www.mayoclinic.org/" + URLEncoder.encode(common.cutStringPerformance(26, 0, connection_.getLink()), "UTF-8");
-        System.out.println(connection_.getLink()+ " - " +convertLink);
+//        System.out.println(connection_.getLink()+ " - " +convertLink);
 
         try {//Constants.HTTP_HEADER +
             Connection connection = Jsoup.connect( convertLink ).userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0").referrer("http://www.google.com").timeout(JSOUP_TIMEOUT*1000);
