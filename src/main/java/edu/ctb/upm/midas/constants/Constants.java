@@ -178,6 +178,12 @@ public class Constants {
     public static final String CONSULT_LAST_SNAPSHOT = "last";
 
     /**
+     * Booleanos
+     */
+    public static final boolean TRUE = true;
+    public static final boolean FALSE = false;
+
+    /**
      * Fecha por default
      */
     @SuppressWarnings("deprecation")

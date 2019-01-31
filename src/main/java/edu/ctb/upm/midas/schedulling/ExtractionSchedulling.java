@@ -2,11 +2,18 @@ package edu.ctb.upm.midas.schedulling;
 
 import edu.ctb.upm.midas.common.util.TimeProvider;
 import edu.ctb.upm.midas.constants.Constants;
+import edu.ctb.upm.midas.enums.StatusHttpEnum;
 import edu.ctb.upm.midas.model.Request;
 import edu.ctb.upm.midas.model.Response;
+import edu.ctb.upm.midas.model.document_structure.Doc;
+import edu.ctb.upm.midas.model.document_structure.Section;
+import edu.ctb.upm.midas.model.document_structure.Source;
 import edu.ctb.upm.midas.service.ExtractService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by gerardo on 16/07/2018.
@@ -17,7 +24,10 @@ import org.springframework.scheduling.annotation.Scheduled;
  * @className ExtractionSchedulling
  * @see
  */
+@Service
 public class ExtractionSchedulling {
+
+    private static final Logger logger = LoggerFactory.getLogger(ExtractionSchedulling.class);
 
     @Autowired
     private TimeProvider timeProvider;
@@ -61,15 +71,46 @@ public class ExtractionSchedulling {
      @Scheduled(cron = "0/15 * 0 ? * 6,7 ")
      */
     @Scheduled(cron = "0 0 0 1 * ?")
-    public void extractionEveryFirstDayOfTheMonth() throws Exception {
+    public void extractionEveryFirstDayOfTheMonth() {
         try {
-            System.out.println("Scheduled task for the first of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
-            Request request = new Request(timeProvider.getNowFormatyyyyMMdd(), true);
-            Response response = extractService.extract(request);
-            System.out.println(response);
+            logger.info("Start!. Scheduled task for the knowledge retrieval procedure for each first day of each month at midnight.");
+            logger.info("MayoClinic snapshot: {}", timeProvider.getNowFormatyyyyMMdd());
+            extractionProcedure(timeProvider.getNowFormatyyyyMMdd(), true);
+            logger.info("Finish it!. Scheduled task for the knowledge retrieval procedure for each first day of each month at midnight.");
         }catch (Exception e){
-            System.out.println("EIDW_ERR (1stOfTheMonth): " + e.getMessage());
+            logger.error("Error. Scheduled task for the knowledge retrieval procedure for each first day of each month at midnight.", e);
         }
+    }
+
+
+    private void extractionProcedure(String snapshot, boolean saveJason) throws Exception {
+        Request request = new Request(snapshot, saveJason);
+        Response response = extractService.extract(request);
+        if (response.getResponseCode().equals(StatusHttpEnum.OK.getClave())) {
+            logger.info("{}: {}", response.getResponseCode(), response.getResponseMessage());
+            retrievalShortReport(response);
+        }else {
+            logger.error("{}: {}", response.getResponseCode(), response.getResponseMessage());
+            retrievalShortReport(response);
+//              Enviar mensaje a correo electrónico de fallo en la recuperación de conocimiento
+        }
+
+    }
+
+
+    private void retrievalShortReport(Response response){
+        for (Source source: response.getSources()) {
+            logger.info("Number of retrieved documents: {}", source.getDocumentCount());
+            int textCount = 0;
+            for (Doc doc: source.getDocuments()) {
+                if (doc.getSectionList()!=null)
+                for (Section section: doc.getSectionList()) {
+                    textCount = textCount + section.getTextCount();
+                }
+            }
+            logger.info("Number of retrieved documents with texts: {}", textCount);
+        }
+        logger.info("Start time: {} - End time: {}", response.getStart_time(), response.getEnd_time());
     }
 
 
@@ -84,12 +125,12 @@ public class ExtractionSchedulling {
     @Scheduled(cron = "0 0 0 15 * ?")
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
-            System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
-            Request request = new Request(timeProvider.getNowFormatyyyyMMdd(), true);
-            Response response = extractService.extract(request);
-            System.out.println(response);
+            logger.info("Start!. Scheduled task for the knowledge retrieval procedure for each 15th day of each month at midnight.");
+            logger.info("MayoClinic snapshot: {}", timeProvider.getNowFormatyyyyMMdd());
+            extractionProcedure(timeProvider.getNowFormatyyyyMMdd(), true);
+            logger.info("Finish it!. Scheduled task for the knowledge retrieval procedure for each 15th day of each month at midnight.");
         }catch (Exception e){
-            System.out.println("EIDW_ERR (15thOfTheMonth): " + e.getMessage());
+            logger.error("Error. Scheduled task for the knowledge retrieval procedure for each 15th day of each month at midnight.", e);
         }
     }
 }

@@ -1,9 +1,5 @@
 package edu.ctb.upm.midas.component;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import edu.ctb.upm.midas.common.util.Common;
-import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.common.util.Common;
 import edu.ctb.upm.midas.constants.Constants;
 import edu.ctb.upm.midas.enums.StatusHttpEnum;
@@ -121,7 +117,7 @@ public class MayoClinicExtraction {
      *
      * @see
      *              createDocumentList
-     *              retrieveMedicalKnowledge
+     *              retrieveMedicalKnowledgeByDocument
      *
      */
     public List<Source> extract(String snapshot) throws Exception {
@@ -172,7 +168,7 @@ public class MayoClinicExtraction {
             System.out.println("START Procesing and extracting articles texts...");
             System.out.println("---------------------------------------------------");
             for (Doc disnetDocument: source.getDocuments()){
-                retrieveMedicalKnowledge(disnetDocument, source.getDocuments().size());
+                retrieveMedicalKnowledgeByDocument(disnetDocument, source.getDocuments().size());
             }
             System.out.println("---------------------------------------------------");
             System.out.println("END Procesing and extracting articles texts...");
@@ -282,7 +278,7 @@ public class MayoClinicExtraction {
                         //la información de los síntomas y causas y el otro enlace que tiene información del diagnóstico
                         Link diseaseLink = new Link(diseaseUrl, diseaseName);
                         //Se crea un Documento
-                        Doc disnetDocument = new Doc(countUniqueDoc, snapshot, diseaseLink, true, true);
+                        Doc disnetDocument = new Doc(countUniqueDoc, snapshot, diseaseLink, Constants.TRUE, Constants.FALSE);
                         //Se crea la enfermedad de la que habla el documento
                         Disease disease = new Disease(countUniqueDoc, diseaseName);
                         //Relaciona el sinónimo con la enfermedad
@@ -451,7 +447,7 @@ public class MayoClinicExtraction {
             //Por cada hijo se obtiene su elemento <a>
             for (Element link:item.getElementsByTag(Constants.HTML_A)) {
 //                System.out.println("QUE PASA: "+item.tagName() + " " + item.getElementsByTag("a"));
-                if (isRelevantMenuItem(link.ownText().trim(), false, disnetDocument)) {
+                if (isRelevantMenuItem(link.ownText().trim(), Constants.FALSE, disnetDocument)) {
 //                        System.out.println(link.ownText().trim());
                     Link url = new Link(counLink, createCompleteURL(link.attr(Constants.HTML_HREF).trim()), link.ownText().trim());
                     linkList.add(url);
@@ -480,11 +476,11 @@ public class MayoClinicExtraction {
      *              getSectionsListByMenuItemName
      *              extractDocumentContent
      */
-    public void retrieveMedicalKnowledge(Doc disnetDocument, int size) throws Exception {
+    public void retrieveMedicalKnowledgeByDocument(Doc disnetDocument, int size) throws Exception {
         List<Section> sections = new ArrayList<>();
         if (disnetDocument.getUrlList()!=null) {
             //Se conectara a los dos enlaces del documento donde hay secciones y textos
-            //<editor-fold desc="RECORRIDO DE LOS ENLACES DEL DOCUMENTO PARA EXTRAER DE SUS SECCIONES Y TEXTOS">
+            //<editor-fold desc="RECORRIDO DE LOS ENLACES DEL DOCUMENTO PARA EXTRAER TEXTOS DE SUS SECCIONES">
             for (Link documentLink : disnetDocument.getUrlList()) {
                 //Se recuperan las secciones según el item de menu que se este consultando
                 List<Section> sectionSearchList = getSectionsListByMenuItemName(documentLink.getDescription());
@@ -499,9 +495,16 @@ public class MayoClinicExtraction {
                 if (connection_.getStatus().equals(StatusHttpEnum.OK.getDescripcion()) && connection_.getDocument() != null) {
                     //Se crea el documento de la página Web
                     document = connection_.getDocument();
+                    disnetDocument.setHasConnected(Constants.TRUE);
                     extractDocumentContent(disnetDocument, document, sectionSearchList);
                 } else {//end if oConnect.connection_().equals("OK")
                     // Mensaje mostrado al documento que no se pudo conectar
+                    if (disnetDocument.isHasConnected()) {
+                        logger.error("Document has not connected by second time (mandatory). Send info email to the DISNET administrator.");
+                    }else{
+                        logger.error("Document has not connected by first and second time (mandatory). Send info email to the DISNET administrator.");
+                    }
+                    disnetDocument.setHasConnected(Constants.FALSE);
                     System.out.println(connection_.getLink() + " ==> " + connection_.getStatus());
                 }//end else if oConnect.connection_().equals("OK")
                 //</editor-fold>
@@ -728,6 +731,7 @@ public class MayoClinicExtraction {
             List<Section> sections = new ArrayList<>();
             sections.add(section);
             disnetDocument.setSectionList(sections);
+            disnetDocument.setDiseaseArticle(Constants.TRUE);
         }else{
             disnetDocument.getSectionList().add(section);
         }

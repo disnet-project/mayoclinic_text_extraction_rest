@@ -56,7 +56,6 @@ public class ExtractService {
         String snapshot = timeProvider.getNowFormatyyyyMMdd();
 
         if (snapshot.equals(request.getSnapshot())) {
-
             try {
                 sourceList = mayoClinicExtraction.extract(request.getSnapshot());
                 if (sourceList.size()>0) {
